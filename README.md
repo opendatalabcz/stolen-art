@@ -1,14 +1,14 @@
 # Augmentace
 
 ## Imgaug
-
-- knihovna imgaug
-- nadefinuji si objekt Sequential, přidám do něj "vrstvy" segmentace
-- poté v cyklu nad obrázky na každý obrázek aplikuji tuto sekvenci, výsledkem je augmentovaný obrázek
+- imgaug library
+- defining a imgaug.Sequential object with augmetation "layers"
+- loop over images and apply the sequence on each of them
+- the result (augmented image) is shown next to the original
 
 
 ## Keras
 
-- momentálně nefunkční
+- does not work at the moment
 
 
