@@ -4,21 +4,26 @@ on: [push, pull_request]
 
 jobs:
   lint:
-    name: "Lint - flake8"
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.6]
+    name: "Lint"
+    runs-on: "ubuntu-latest"
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: flake8
-      uses: TrueBrain/actions-flake8@master
-
+      - uses: actions/checkout@v2
+      - run: ls
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniconda-version: "latest"
+          environment-file: environment.yml
+          activate-environment: SAR
+      - name: Bash
+        shell: bash -l {0}
+        run: |
+          conda info
+          conda install -c anaconda pylint
+      - name: Lint
+        shell: bash -l {0}
+        run: |
+          echo "::add-matcher::.github/workflows/pylint_problem_matcher.json"
+          find . -type f -name "*.py" | xargs pylint --exit-zero -j 8
   bandit:
     name: "Security check - Bandit"
     runs-on: ubuntu-latest
