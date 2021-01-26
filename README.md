@@ -1,9 +1,17 @@
 # ORB testing
 
-Due to very high resolution of testing images, there are two copies of the same notebook, each working with different image size. The images are displayed in the notebooks and large notebooks sometimes take long time to load, so if you have problem with loading, use the smallersize notebook. 
+This notebook simulates searching for a painting in a database.
+
+## Test data
+
+For this notebook I took pictures of several paintings from different angles and various light conditions. 
+
+Paintings in "mydata-found" are considered found paintings (paintings we want to search in the database). 
+Paintings in "mydata-stolen" are considered stolen paintings (paintings in the database).
 
 
 # Steps
 
-## Load and Preprocess
-- TODO
+For each found painting, search the database for a best match and display the result.
+
+- more TODO
