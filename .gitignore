@@ -1,2 +1,7 @@
 .ipynb_checkpoints/
 kerasaug/
+Artworks.csv
+MetObjects.csv
+MoMA/
+Tate/
+Tate_artwork_data.csv
