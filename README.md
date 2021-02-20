@@ -14,4 +14,3 @@ Paintings in "mydata-stolen" are considered stolen paintings (paintings in the d
 
 For each found painting, search the database for a best match and display the result.
 
-- more TODO
