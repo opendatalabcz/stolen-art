@@ -1,16 +1,13 @@
-# ORB testing
+# Datasets
 
-This notebook simulates searching for a painting in a database.
+## Imgaug
+- imgaug library
+- defining a imgaug.Sequential object with augmetation "layers"
+- loop over images and apply the sequence on each of them
+- the result (augmented image) is shown next to the original
+=======
 
-## Test data
-
-For this notebook I took pictures of several paintings from different angles and various light conditions. 
-
-Paintings in "mydata-found" are considered found paintings (paintings we want to search in the database). 
-Paintings in "mydata-stolen" are considered stolen paintings (paintings in the database).
-
-
-# Steps
-
-For each found painting, search the database for a best match and display the result.
-
+## The Tate Collection
+- thousands rows of data
+- various forms of art, but you can easily filter by medium
+- https://github.com/tategallery/collection
