@@ -8,5 +8,5 @@ class PaintingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Painting
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'image')
         read_only_Fields = ('id',)
