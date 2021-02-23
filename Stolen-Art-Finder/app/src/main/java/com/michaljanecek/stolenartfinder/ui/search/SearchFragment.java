@@ -1,7 +1,6 @@
-package com.michaljanecek.stolenartfinder.ui.home;
+package com.michaljanecek.stolenartfinder.ui.search;
 
 import android.Manifest;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,6 +46,7 @@ public class SearchFragment extends Fragment {
 
     private Button takePicButton;
     private Button uploadPicButton;
+    private Button uploadToServerButton;
     private ImageView imageToSearch;
 
     String currentPhotoPath;
@@ -96,6 +95,31 @@ public class SearchFragment extends Fragment {
 
             }
         });
+
+
+        uploadPicButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                checkStoragePermissions();
+                dispatchPickPictureIntent();
+
+            }
+        });
+
+
+        uploadToServerButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+              uploadToServer();
+
+            }
+        });
+
+    }
+
+    private boolean uploadToServer(){
+
+
 
     }
 
