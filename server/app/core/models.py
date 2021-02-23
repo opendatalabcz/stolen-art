@@ -4,7 +4,7 @@ from django.db import models
 
 
 
-class Tag(models.Model):
+class Painting(models.Model):
     """Tag to be used for a recipe"""
     name = models.CharField(max_length=255)
    
