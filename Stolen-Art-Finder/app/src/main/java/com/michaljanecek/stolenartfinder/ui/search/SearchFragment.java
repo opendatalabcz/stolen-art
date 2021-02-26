@@ -25,13 +25,23 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.michaljanecek.stolenartfinder.R;
 import com.michaljanecek.stolenartfinder.helpers.ImageUtils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+
 
 import static android.app.Activity.RESULT_OK;
 
@@ -60,6 +70,7 @@ public class SearchFragment extends Fragment {
 
         takePicButton = root.findViewById(R.id.button_take_picture);
         uploadPicButton = root.findViewById(R.id.button_upload_picture);
+        uploadToServerButton = root.findViewById(R.id.button_post_upload);
         imageToSearch = root.findViewById(R.id.image_to_search);
 
         setOnClickListeners();
@@ -118,9 +129,9 @@ public class SearchFragment extends Fragment {
     }
 
     private boolean uploadToServer(){
+        
 
-
-
+    return true;
     }
 
     private File createImageFile() throws IOException {
