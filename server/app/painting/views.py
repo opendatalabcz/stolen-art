@@ -4,7 +4,8 @@ from core.models import Painting
 
 from painting import serializers
 
-# ZMENA - odstraneni auth veci
+from painting.pipelines import process_dir_to_array
+
 
 class PaintingViewSet(viewsets.GenericViewSet,
                  mixins.ListModelMixin,
@@ -14,10 +15,9 @@ class PaintingViewSet(viewsets.GenericViewSet,
     serializer_class = serializers.PaintingSerializer
 
     def get_queryset(self):
-        """Return objects for the current authenticated user only"""
         return self.queryset
 
     def perform_create(self, serializer):
-        """Create a new ingredient"""
+        """Create a new painting"""
         serializer.save()
-
+        #process_dir_to_array("tate500")

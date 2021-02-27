@@ -10,3 +10,4 @@ class PaintingSerializer(serializers.ModelSerializer):
         model = Painting
         fields = ('id', 'name', 'image')
         read_only_Fields = ('id',)
+
