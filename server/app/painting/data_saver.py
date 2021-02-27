@@ -1,6 +1,5 @@
 from core.models import Painting
 from django.core.files import File
-import requests
 import cv2
 
 def save_images_to_db(paintings_paths):
@@ -14,7 +13,7 @@ def save_images_to_db(paintings_paths):
     
         p = Painting(name=name)
         p.image.save(str(path),image_file,save=True)
-        
+        #Painting.objects.create(name=name, image=image_file)
        
 
 

@@ -7,6 +7,7 @@ from painting import serializers
 from painting.pipelines import process_dir_to_array
 
 
+
 class PaintingViewSet(viewsets.GenericViewSet,
                  mixins.ListModelMixin,
                  mixins.CreateModelMixin):
@@ -21,3 +22,5 @@ class PaintingViewSet(viewsets.GenericViewSet,
         """Create a new painting"""
         serializer.save()
         #process_dir_to_array("tate500")
+
+
