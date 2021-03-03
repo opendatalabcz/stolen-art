@@ -11,3 +11,8 @@ class PaintingSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'image')
         read_only_Fields = ('id',)
 
+
+class ImageSearchParamsSerializer(serializers.Serializer):
+
+    image = serializers.ImageField()
+    k = serializers.IntegerField()
