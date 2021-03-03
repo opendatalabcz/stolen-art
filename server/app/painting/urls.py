@@ -5,8 +5,8 @@ from painting import views
 
 
 router = DefaultRouter()
-router.register('paintings', views.PaintingViewSet)
-router.register('search', views.SearchPaintingViewSet)
+router.register('paintings', views.PaintingViewSet, 'paintings')
+router.register('search', views.SearchPaintingViewSet, 'search')
 
 app_name = 'painting'
 
