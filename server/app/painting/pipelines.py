@@ -12,4 +12,7 @@ def process_dir_to_array(directory):
     #descriptors = orbh.detect_and_compute_from_paths(paintings_paths)
 
 
-    
+def find_similar(uploaded_image):
+
+    image = dl.file_in_memory_to_cv_image(uploaded_image)
+    print(type(image))

@@ -7,6 +7,7 @@ from painting import views
 router = DefaultRouter()
 router.register('paintings', views.PaintingViewSet, 'paintings')
 router.register('search', views.SearchPaintingViewSet, 'search')
+router.register('descriptors_sample', views.DescriptorsViewSet, 'descriptors')
 
 app_name = 'painting'
 

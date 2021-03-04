@@ -1,5 +1,7 @@
 import pathlib
 import cv2
+import numpy as np
+from PIL import Image
 
 
 
@@ -18,6 +20,14 @@ class DataLoader:
 
         return paintings_paths
 
+
+    def file_to_image(file):
+
+        pil_img = Image.open(file)
+        arr_img = np.array(pil_img)
+        cv_image = cv2.cvtColor(arr_img, cv2.COLOR_RGB2BGR)
+
+        return cv_image
 
     
 

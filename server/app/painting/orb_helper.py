@@ -29,11 +29,11 @@ class ORBHelper:
 
         return orb_results
 
-    def detect_and_compute(self, image, keypoints=True):
+    def detect_and_compute(self, image, return_keypoints=True):
 
         keypoints, descriptors = self.orb.detectAndCompute(image, None)
 
-        if keypoints:
+        if return_keypoints:
             return keypoints, descriptors
         else: 
             return descriptors

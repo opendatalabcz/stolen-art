@@ -2,6 +2,7 @@ import uuid
 import os
 
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 def painting_image_file_path(instance, filename):
     """Generate file path for new painting image"""
@@ -10,7 +11,7 @@ def painting_image_file_path(instance, filename):
     return os.path.join('uploads/painting/', filename)
 
 class Painting(models.Model):
-    """Tag to be used for a recipe"""
+    """Image with name"""
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to=painting_image_file_path) 
    
@@ -18,3 +19,19 @@ class Painting(models.Model):
     def __str__(self):
         return self.name
 
+class PaintingDescriptors(models.Model):
+    """Descriptors of a painting"""
+
+    painting = models.ForeignKey(Painting, on_delete=models.CASCADE)
+
+    descriptors = ArrayField(
+        ArrayField(
+            models.IntegerField(),
+            size=32,
+        ),
+    )
+
+   
+
+    def __str__(self):
+        return self.name

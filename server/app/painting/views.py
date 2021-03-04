@@ -1,13 +1,13 @@
 from rest_framework import viewsets, mixins
 
-from core.models import Painting
+from core.models import Painting, PaintingDescriptors
 
 from painting import serializers
 
 from django.core import serializers as core_serializers
 
 
-from painting.pipelines import process_dir_to_array
+from painting.pipelines import find_similar
 
 
 
@@ -19,12 +19,6 @@ class PaintingViewSet(viewsets.GenericViewSet,
     serializer_class = serializers.PaintingSerializer
 
     def get_queryset(self):
-
-        image = self.request.query_params.get('image')
-        if image:
-            print("image yes")
-        else:
-            print("image no")
 
         return self.queryset
 
@@ -41,7 +35,8 @@ import time
 class SearchPaintingViewSet(viewsets.GenericViewSet,
                  mixins.ListModelMixin
                  ):
-    """Manage Paintings in the database"""
+    
+
     queryset = Painting.objects.none()
     serializer_class = serializers.ImageSearchParamsSerializer
 
@@ -55,13 +50,14 @@ class SearchPaintingViewSet(viewsets.GenericViewSet,
         serializer.is_valid(raise_exception=True)
 
         # how many most similar paintings to find
-        k = request.POST.get('k')
+        k = serializer.validated_data.get("k")
+
 
         # the painting uploaded by user
-        image = request.FILES['image']
+        uploaded_image = serializer.validated_data.get("image")
         
-        print(type(image))
-        print(k)
+        similar_ids = find_similar(uploaded_image)
+        
         
         # testing custom return
 
@@ -71,3 +67,14 @@ class SearchPaintingViewSet(viewsets.GenericViewSet,
         mokdata = Painting.objects.filter(pk__in=ok_ids).values()
 
         return Response(mokdata)
+
+
+class DescriptorsViewSet(viewsets.GenericViewSet,
+                 mixins.ListModelMixin):
+
+    queryset = PaintingDescriptors.objects.order_by('?')[:5]
+    serializer_class = serializers.PaintingDescriptorsSerializer
+
+    def get_queryset(self):
+
+        return self.queryset
