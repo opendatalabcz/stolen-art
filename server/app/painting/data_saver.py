@@ -27,20 +27,19 @@ def save_images_to_db(paintings_paths):
         image = dl.file_to_image(image_file)
         im_descriptors = orbh.detect_and_compute(image, return_keypoints=False)
 
-        #print(type(im_descriptors))
-        #print(im_descriptors)
         
+        if im_descriptors is None:
+            # TODO image has no descriptors
+            continue
+
         im_descriptors = im_descriptors.tolist()
         #print(type(im_descriptors))
 
         d = PaintingDescriptors(painting=p,descriptors=im_descriptors)
         d.save()
-        
 
-        #Painting.objects.create(name=name, image=image_file)
         counter = counter + 1
-        if counter == 100:
-            break
+        
 
 
     print("Saving to DB was a success.")

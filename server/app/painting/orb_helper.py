@@ -5,7 +5,7 @@ import cv2
 class ORBHelper:
 
 
-    def __init__(self, n_features):
+    def __init__(self, n_features=500):
         
         self.orb = cv2.ORB_create(nfeatures=n_features)
 
@@ -17,14 +17,14 @@ class ORBHelper:
         return image
 
 
-    def detect_and_compute_from_paths(self, paths, keypoints=True):
+    def detect_and_compute_from_paths(self, paths, return_keypoints=True):
 
         orb_results = []
 
         for path in paths:
 
             image = self.load_and_preprocess(path)
-            res = self.detect_and_compute(image, keypoints=keypoints)
+            res = self.detect_and_compute(image, return_keypoints=return_keypoints)
             orb_results.append(res)
 
         return orb_results
@@ -37,3 +37,4 @@ class ORBHelper:
             return keypoints, descriptors
         else: 
             return descriptors
+        

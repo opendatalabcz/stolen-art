@@ -2,6 +2,7 @@ import pathlib
 import cv2
 import numpy as np
 from PIL import Image
+from core.models import PaintingDescriptors
 
 
 
@@ -28,6 +29,20 @@ class DataLoader:
         cv_image = cv2.cvtColor(arr_img, cv2.COLOR_RGB2BGR)
 
         return cv_image
+
+    def load_descriptors_from_db():
+
+        descs_db = PaintingDescriptors.objects.all().values()
+        #print(descs_db[2])
+        descs = {}
+        for desc_inst in descs_db:
+            painting_id = desc_inst['painting_id']
+            decriptors_as_list = desc_inst['descriptors']
+            descriptors = np.asarray(decriptors_as_list, np.uint8)
+            descs[painting_id] = descriptors
+
+        
+        return descs
 
     
 

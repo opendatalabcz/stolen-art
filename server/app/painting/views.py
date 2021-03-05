@@ -8,7 +8,7 @@ from django.core import serializers as core_serializers
 
 
 from painting.pipelines import find_similar
-
+from app import settings
 
 
 class PaintingViewSet(viewsets.GenericViewSet,
@@ -57,22 +57,27 @@ class SearchPaintingViewSet(viewsets.GenericViewSet,
         uploaded_image = serializer.validated_data.get("image")
         
         similar_ids = find_similar(uploaded_image)
+        #similar_ids = [5,6,7]
         
         
         # testing custom return
+        #time.sleep(3)
 
-        ok_ids = [5,6,7]
-        time.sleep(3)
+        similar_paintings = Painting.objects.filter(pk__in=similar_ids).values()
 
-        mokdata = Painting.objects.filter(pk__in=ok_ids).values()
 
-        return Response(mokdata)
+        # MEDIA URL can change, so Django does not store it in DB, I need to prepend it myself
+        for painting in similar_paintings:
+            
+            painting['image'] = "http://" + request.META['HTTP_HOST'] + settings.MEDIA_URL + painting['image']
+
+        return Response(similar_paintings)
 
 
 class DescriptorsViewSet(viewsets.GenericViewSet,
                  mixins.ListModelMixin):
 
-    queryset = PaintingDescriptors.objects.order_by('?')[:5]
+    queryset = PaintingDescriptors.objects.order_by('?')[:1]
     serializer_class = serializers.PaintingDescriptorsSerializer
 
     def get_queryset(self):
