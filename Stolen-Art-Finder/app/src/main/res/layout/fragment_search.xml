@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="?attr/actionBarSize"
-    tools:context=".ui.home.SearchFragment">
+    tools:context=".ui.search.SearchFragment">
 
     <ImageView
         android:id="@+id/image_to_search"
@@ -18,6 +18,17 @@
 
     </ImageView>
 
+
+    <Button
+        android:id="@+id/button_post_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/upload_to_server"
+        app:layout_constraintBottom_toTopOf="@+id/button_take_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/button_take_picture"

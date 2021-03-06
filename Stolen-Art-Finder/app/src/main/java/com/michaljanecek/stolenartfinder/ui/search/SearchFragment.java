@@ -1,7 +1,6 @@
-package com.michaljanecek.stolenartfinder.ui.home;
+package com.michaljanecek.stolenartfinder.ui.search;
 
 import android.Manifest;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,13 +25,23 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.michaljanecek.stolenartfinder.R;
 import com.michaljanecek.stolenartfinder.helpers.ImageUtils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+
 
 import static android.app.Activity.RESULT_OK;
 
@@ -48,6 +56,7 @@ public class SearchFragment extends Fragment {
 
     private Button takePicButton;
     private Button uploadPicButton;
+    private Button uploadToServerButton;
     private ImageView imageToSearch;
 
     String currentPhotoPath;
@@ -61,6 +70,7 @@ public class SearchFragment extends Fragment {
 
         takePicButton = root.findViewById(R.id.button_take_picture);
         uploadPicButton = root.findViewById(R.id.button_upload_picture);
+        uploadToServerButton = root.findViewById(R.id.button_post_upload);
         imageToSearch = root.findViewById(R.id.image_to_search);
 
         setOnClickListeners();
@@ -97,6 +107,31 @@ public class SearchFragment extends Fragment {
             }
         });
 
+
+        uploadPicButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                checkStoragePermissions();
+                dispatchPickPictureIntent();
+
+            }
+        });
+
+
+        uploadToServerButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+              uploadToServer();
+
+            }
+        });
+
+    }
+
+    private boolean uploadToServer(){
+        
+
+    return true;
     }
 
     private File createImageFile() throws IOException {

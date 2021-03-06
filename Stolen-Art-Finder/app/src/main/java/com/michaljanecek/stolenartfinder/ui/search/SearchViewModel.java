@@ -1,4 +1,4 @@
-package com.michaljanecek.stolenartfinder.ui.home;
+package com.michaljanecek.stolenartfinder.ui.search;
 
 import android.graphics.Bitmap;
 

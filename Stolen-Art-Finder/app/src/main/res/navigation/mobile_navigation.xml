@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_search"
-        android:name="com.michaljanecek.stolenartfinder.ui.home.SearchFragment"
+        android:name="com.michaljanecek.stolenartfinder.ui.search.SearchFragment"
         android:label="@string/title_search"
         tools:layout="@layout/fragment_search" />
 
