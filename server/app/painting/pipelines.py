@@ -1,7 +1,7 @@
 from painting.data_loader import DataLoader as dl
 from painting.data_saver import save_images_to_db
 from painting.orb_helper import ORBHelper
-from painting.matchers import get_best_match
+from painting.matchers import get_best_matches
 
 def process_dir_to_array(directory):
 
@@ -13,7 +13,7 @@ def process_dir_to_array(directory):
     #descriptors = orbh.detect_and_compute_from_paths(paintings_paths)
 
 
-def find_similar(uploaded_image):
+def find_similar(uploaded_image, n_nearest=1):
 
     image = dl.file_to_image(uploaded_image)
     image_descriptors = ORBHelper().detect_and_compute(image, return_keypoints=False)
@@ -21,9 +21,9 @@ def find_similar(uploaded_image):
     descriptors_from_db = dl.load_descriptors_from_db()
     
     orbh = ORBHelper()
-    best_match_id, _, _ = get_best_match(image_descriptors, descriptors_from_db)
+    best_matches, _, _ = get_best_matches(image_descriptors, descriptors_from_db, n_nearest=n_nearest)
 
 
     #simple_match_test(image_descriptors, descriptors_from_db[2])
 
-    return [best_match_id]
+    return best_matches

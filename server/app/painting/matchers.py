@@ -1,9 +1,14 @@
 import cv2
 import numpy as np
 
+def get_best_matches(found_painting_descriptor, all_descriptors, n_nearest=1):
+
+    matches = get_nearest_matches_flann(found_painting_descriptor, all_descriptors, n_nearest=n_nearest)
 
 
-def get_best_match(found_painting_descriptor, all_descriptors, k = 2, min_matches = 10):
+    return matches
+
+def get_nearest_matches_flann(found_painting_descriptor, all_descriptors, n_nearest=1, k = 2, min_matches = 10):
 
 
     # 1. parametr FlannBasedMatcheru
@@ -62,9 +67,9 @@ def get_best_match(found_painting_descriptor, all_descriptors, k = 2, min_matche
     
         
         # print("Pocet prijatelnych matchu: ", ok_matches_num)
+
+    best_matches_indices = dict(sorted(matches_count.items(), key = lambda g: (g[1]), reverse = True)[:n_nearest]).keys()
+
+
         
-    best_match_index = max(matches_count, key=matches_count.get)
-    #print(type(best_match_index))
-    best_match_index = best_match_index if matches_count[best_match_index] >= min_matches else -1
-        
-    return best_match_index, matches[best_match_index], matches_masks[best_match_index] 
+    return best_matches_indices, matches[best_match_index], matches_masks[best_match_index] 

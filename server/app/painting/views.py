@@ -56,7 +56,7 @@ class SearchPaintingViewSet(viewsets.GenericViewSet,
         # the painting uploaded by user
         uploaded_image = serializer.validated_data.get("image")
         
-        similar_ids = find_similar(uploaded_image)
+        similar_ids = find_similar(uploaded_image, k)
         #similar_ids = [5,6,7]
         
         
