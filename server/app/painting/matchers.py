@@ -72,4 +72,4 @@ def get_nearest_matches_flann(found_painting_descriptor, all_descriptors, n_near
 
 
         
-    return best_matches_indices, matches[best_match_index], matches_masks[best_match_index] 
+    return best_matches_indices

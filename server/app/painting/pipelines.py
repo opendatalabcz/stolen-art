@@ -21,7 +21,7 @@ def find_similar(uploaded_image, n_nearest=1):
     descriptors_from_db = dl.load_descriptors_from_db()
     
     orbh = ORBHelper()
-    best_matches, _, _ = get_best_matches(image_descriptors, descriptors_from_db, n_nearest=n_nearest)
+    best_matches = get_best_matches(image_descriptors, descriptors_from_db, n_nearest=n_nearest)
 
 
     #simple_match_test(image_descriptors, descriptors_from_db[2])
