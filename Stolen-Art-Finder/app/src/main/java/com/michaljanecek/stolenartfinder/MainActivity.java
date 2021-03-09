@@ -2,7 +2,6 @@ package com.michaljanecek.stolenartfinder;
 
 import android.os.Bundle;
 
-import com.androidnetworking.AndroidNetworking;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        AndroidNetworking.initialize(getApplicationContext());
     }
 
 }

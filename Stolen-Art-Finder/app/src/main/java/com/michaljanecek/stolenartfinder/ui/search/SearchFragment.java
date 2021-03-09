@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.Observable;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,13 +27,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.common.Priority;
-import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONArrayRequestListener;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.michaljanecek.stolenartfinder.R;
 import com.michaljanecek.stolenartfinder.helpers.ImageUtils;
+import com.michaljanecek.stolenartfinder.networking.APIClient;
+import com.michaljanecek.stolenartfinder.networking.SearchDBService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,6 +41,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -49,7 +59,7 @@ public class SearchFragment extends Fragment {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_PICK = 2;
-    private static final int PICK_FROM_GALLERY_PERMISSION= 3;
+    private static final int PICK_FROM_GALLERY_PERMISSION = 3;
 
 
     private SearchViewModel searchViewModel;
@@ -121,18 +131,56 @@ public class SearchFragment extends Fragment {
         uploadToServerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-              uploadToServer();
+                uploadToServer();
 
             }
         });
 
     }
 
-    private boolean uploadToServer(){
-        
+    private boolean uploadToServer() {
 
-    return true;
+        File file = new File(currentPhotoPath);
+
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+        // MultipartBody.Part is used to send also the actual file name
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+
+        // add another part within the multipart request
+        RequestBody fullName =
+                RequestBody.create(MediaType.parse("multipart/form-data"), "Your Name");
+
+
+        RequestBody k = RequestBody.create(MultipartBody.FORM, "1");
+
+        SearchDBService service = APIClient.getRetrofitInstance().create(SearchDBService.class);
+
+
+
+        Call<ResponseBody> call = service.searchByPainting(body, k);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+              //  progressDoalog.dismiss();
+                response.body();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+              //  progressDoalog.dismiss();
+                Log.e("Ex", "Exception: " + Log.getStackTraceString(t));
+                Toast.makeText(getContext(), "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return true;
+
     }
+
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -221,8 +269,7 @@ public class SearchFragment extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
-    {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case PICK_FROM_GALLERY_PERMISSION:
                 // If request is cancelled, the result arrays are empty.
@@ -258,7 +305,7 @@ public class SearchFragment extends Fragment {
         getContext().sendBroadcast(mediaScanIntent);
     }
 
-    public void checkStoragePermissions(){
+    public void checkStoragePermissions() {
 
         try {
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -266,7 +313,7 @@ public class SearchFragment extends Fragment {
             } else {
                 // permissions are already granted
                 //dispatchPickPictureIntent();
-                int stop=0;
+                int stop = 0;
             }
         } catch (Exception e) {
             e.printStackTrace();
