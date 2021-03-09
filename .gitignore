@@ -138,3 +138,4 @@ cython_debug/
 
 server/app/datasets/*
 server/app/media/*
+!**/__pycache__/
