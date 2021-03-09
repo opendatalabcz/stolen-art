@@ -1,0 +1,47 @@
+name: Static checks
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    name: "Lint"
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v2
+      - run: ls
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniconda-version: "latest"
+          environment-file: environment.yml
+          activate-environment: SAR
+      - name: Bash
+        shell: bash -l {0}
+        run: |
+          conda info
+          conda install -c anaconda pylint
+      - name: Lint
+        shell: bash -l {0}
+        run: |
+          echo "::add-matcher::.github/workflows/pylint_problem_matcher.json"
+          find . -type f -name "*.py" | xargs pylint --exit-zero -j 8
+  bandit:
+    name: "Security check - Bandit"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Security check - Bandit
+      uses: libertyy/py3-bandit-check@v2
+      env:
+        TARGET_DIR: .
+
+    - name: Security check report artifacts
+      uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+        name: Security report
+        path: ${{ RUNNER.temp }}/_github_home/bandit_report.out
