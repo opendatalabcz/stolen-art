@@ -1,6 +1,5 @@
 # Datasets
 
-<<<<<<< HEAD:README-aug.md
 ## Imgaug
 - imgaug library
 - defining a imgaug.Sequential object with augmetation "layers"
@@ -12,5 +11,3 @@
 - thousands rows of data
 - various forms of art, but you can easily filter by medium
 - https://github.com/tategallery/collection
->>>>>>> master:README.md
-
