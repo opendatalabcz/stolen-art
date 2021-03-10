@@ -1,6 +1,10 @@
 package com.michaljanecek.stolenartfinder.networking;
 
 
+import com.michaljanecek.stolenartfinder.models.FoundPaintingModel;
+
+import java.util.List;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -14,8 +18,8 @@ public interface SearchDBService {
 
     @Multipart
     @POST("api/painting/search/")
-    Call<ResponseBody> searchByPainting(@Part MultipartBody.Part image,
-                                        @Part("k") RequestBody k);
+    Call<List<FoundPaintingModel>> searchByPainting(@Part MultipartBody.Part image,
+                                                    @Part("k") RequestBody k);
 
 
 }

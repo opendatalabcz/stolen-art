@@ -10,6 +10,10 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,16 +34,27 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.michaljanecek.stolenartfinder.R;
 import com.michaljanecek.stolenartfinder.helpers.ImageUtils;
+import com.michaljanecek.stolenartfinder.models.FoundPaintingModel;
 import com.michaljanecek.stolenartfinder.networking.APIClient;
 import com.michaljanecek.stolenartfinder.networking.SearchDBService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 import okhttp3.MediaType;
@@ -68,9 +84,10 @@ public class SearchFragment extends Fragment {
     private Button uploadPicButton;
     private Button uploadToServerButton;
     private ImageView imageToSearch;
+    private ProgressBar progressBar;
 
     String currentPhotoPath;
-
+    List<FoundPaintingModel> foundPaintings;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -82,6 +99,7 @@ public class SearchFragment extends Fragment {
         uploadPicButton = root.findViewById(R.id.button_upload_picture);
         uploadToServerButton = root.findViewById(R.id.button_post_upload);
         imageToSearch = root.findViewById(R.id.image_to_search);
+        progressBar = root.findViewById(R.id.progress_bar);
 
         setOnClickListeners();
 
@@ -90,6 +108,17 @@ public class SearchFragment extends Fragment {
             @Override
             public void onChanged(@Nullable Bitmap image) {
                 imageToSearch.setImageBitmap(image);
+            }
+        });
+
+
+        searchViewModel.getFoundImages().observe(getViewLifecycleOwner(), new Observer<List<Bitmap>>() {
+
+            @Override
+            public void onChanged(@Nullable List<Bitmap> images) {
+
+                newImageDownloaded();
+
             }
         });
 
@@ -138,6 +167,82 @@ public class SearchFragment extends Fragment {
 
     }
 
+    private void newImageDownloaded(){
+
+        List<Bitmap> images = searchViewModel.getFoundImages().getValue();
+
+        if (images == null || images.isEmpty())
+            return;
+
+        imageToSearch.setImageBitmap(images.get(0));
+
+    }
+
+    private void downloadImage(String fromUrl) {
+
+
+        HandlerThread ht = new HandlerThread("MyHandlerThread");
+        ht.start();
+        Handler asyncHandler = new Handler(ht.getLooper()) {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                Bitmap downloadedImage = (Bitmap) msg.obj;
+
+                // Do things on UI thread HERE
+                searchViewModel.updateFoundImages(downloadedImage);
+
+            }
+        };
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                InputStream in = null;
+
+                try {
+                    Log.i("URL", fromUrl);
+                    URL url = new URL(fromUrl);
+                    URLConnection urlConn = url.openConnection();
+                    HttpURLConnection httpConn = (HttpURLConnection) urlConn;
+                    httpConn.connect();
+
+                    in = httpConn.getInputStream();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Bitmap downloadedImage = BitmapFactory.decodeStream(in);
+
+                Message message = new Message();
+                message.obj = downloadedImage;
+                asyncHandler.sendMessage(message);
+
+
+            }
+        };
+        asyncHandler.post(runnable);
+    }
+
+    private void paintingsFound(){
+
+        if (foundPaintings == null)
+            return;
+
+
+        for (FoundPaintingModel found: foundPaintings){
+
+            String imageUrl = found.getImageUrl();
+
+            downloadImage(imageUrl);
+
+        }
+
+
+
+    }
+
+
+
     private boolean uploadToServer() {
 
         File file = new File(currentPhotoPath);
@@ -160,17 +265,19 @@ public class SearchFragment extends Fragment {
 
 
 
-        Call<ResponseBody> call = service.searchByPainting(body, k);
+        Call<List<FoundPaintingModel>> call = service.searchByPainting(body, k);
 
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new Callback<List<FoundPaintingModel>>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<List<FoundPaintingModel>> call, Response<List<FoundPaintingModel>> response) {
               //  progressDoalog.dismiss();
-                response.body();
+
+                foundPaintings = response.body();
+                paintingsFound();
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<List<FoundPaintingModel>> call, Throwable t) {
               //  progressDoalog.dismiss();
                 Log.e("Ex", "Exception: " + Log.getStackTraceString(t));
                 Toast.makeText(getContext(), "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
@@ -180,6 +287,9 @@ public class SearchFragment extends Fragment {
         return true;
 
     }
+
+
+
 
 
     private File createImageFile() throws IOException {
@@ -267,6 +377,9 @@ public class SearchFragment extends Fragment {
                 break;
         }
     }
+
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
