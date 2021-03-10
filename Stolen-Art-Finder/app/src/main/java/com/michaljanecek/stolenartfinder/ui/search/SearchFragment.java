@@ -104,23 +104,9 @@ public class SearchFragment extends Fragment {
         setOnClickListeners();
 
 
-        searchViewModel.getImageToSearch().observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
-            @Override
-            public void onChanged(@Nullable Bitmap image) {
-                imageToSearch.setImageBitmap(image);
-            }
-        });
+        searchViewModel.getImageToSearch().observe(getViewLifecycleOwner(), image -> imageToSearch.setImageBitmap(image));
 
-
-        searchViewModel.getFoundImages().observe(getViewLifecycleOwner(), new Observer<List<Bitmap>>() {
-
-            @Override
-            public void onChanged(@Nullable List<Bitmap> images) {
-
-                newImageDownloaded();
-
-            }
-        });
+        searchViewModel.getFoundImages().observe(getViewLifecycleOwner(), images -> newImageDownloaded());
 
 
         return root;
@@ -128,47 +114,29 @@ public class SearchFragment extends Fragment {
 
     private void setOnClickListeners() {
 
-        takePicButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        takePicButton.setOnClickListener(v -> dispatchTakePictureIntent());
 
-                dispatchTakePictureIntent();
+        uploadPicButton.setOnClickListener(v -> {
 
-            }
+            checkStoragePermissions();
+            dispatchPickPictureIntent();
+
         });
 
+        uploadPicButton.setOnClickListener(v -> {
 
-        uploadPicButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+            checkStoragePermissions();
+            dispatchPickPictureIntent();
 
-                checkStoragePermissions();
-                dispatchPickPictureIntent();
-
-            }
         });
 
-
-        uploadPicButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                checkStoragePermissions();
-                dispatchPickPictureIntent();
-
-            }
-        });
-
-
-        uploadToServerButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                uploadToServer();
-
-            }
-        });
+        uploadToServerButton.setOnClickListener(v -> uploadToServer());
 
     }
 
-    private void newImageDownloaded(){
+    private void newImageDownloaded() {
 
+        progressBar.setVisibility(View.INVISIBLE);
         List<Bitmap> images = searchViewModel.getFoundImages().getValue();
 
         if (images == null || images.isEmpty())
@@ -194,42 +162,43 @@ public class SearchFragment extends Fragment {
 
             }
         };
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
 
-                InputStream in = null;
+        Runnable runnable = () -> {
 
-                try {
-                    Log.i("URL", fromUrl);
-                    URL url = new URL(fromUrl);
-                    URLConnection urlConn = url.openConnection();
-                    HttpURLConnection httpConn = (HttpURLConnection) urlConn;
-                    httpConn.connect();
+            InputStream in = null;
 
-                    in = httpConn.getInputStream();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Bitmap downloadedImage = BitmapFactory.decodeStream(in);
+            try {
+                Log.i("URL", fromUrl);
+                URL url = new URL(fromUrl);
+                URLConnection urlConn = url.openConnection();
+                HttpURLConnection httpConn = (HttpURLConnection) urlConn;
+                httpConn.connect();
 
-                Message message = new Message();
-                message.obj = downloadedImage;
-                asyncHandler.sendMessage(message);
-
-
+                in = httpConn.getInputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            Bitmap downloadedImage = BitmapFactory.decodeStream(in);
+
+            Message message = new Message();
+            message.obj = downloadedImage;
+            asyncHandler.sendMessage(message);
+
+
         };
         asyncHandler.post(runnable);
     }
 
-    private void paintingsFound(){
+    private void paintingsFound() {
 
-        if (foundPaintings == null)
+        if (foundPaintings == null) {
+
+            //TODO tell the user that no matches were found
+            progressBar.setVisibility(View.INVISIBLE);
             return;
+        }
 
-
-        for (FoundPaintingModel found: foundPaintings){
+        for (FoundPaintingModel found : foundPaintings) {
 
             String imageUrl = found.getImageUrl();
 
@@ -237,14 +206,11 @@ public class SearchFragment extends Fragment {
 
         }
 
-
-
     }
 
 
-
-    private boolean uploadToServer() {
-
+    private void uploadToServer() {
+        progressBar.setVisibility(View.VISIBLE);
         File file = new File(currentPhotoPath);
 
         RequestBody requestFile =
@@ -264,13 +230,13 @@ public class SearchFragment extends Fragment {
         SearchDBService service = APIClient.getRetrofitInstance().create(SearchDBService.class);
 
 
-
         Call<List<FoundPaintingModel>> call = service.searchByPainting(body, k);
 
         call.enqueue(new Callback<List<FoundPaintingModel>>() {
             @Override
             public void onResponse(Call<List<FoundPaintingModel>> call, Response<List<FoundPaintingModel>> response) {
-              //  progressDoalog.dismiss();
+                //  progressDoalog.dismiss();
+
 
                 foundPaintings = response.body();
                 paintingsFound();
@@ -278,18 +244,16 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<FoundPaintingModel>> call, Throwable t) {
-              //  progressDoalog.dismiss();
+
+                progressBar.setVisibility(View.INVISIBLE);
                 Log.e("Ex", "Exception: " + Log.getStackTraceString(t));
                 Toast.makeText(getContext(), "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
             }
         });
 
-        return true;
+
 
     }
-
-
-
 
 
     private File createImageFile() throws IOException {
@@ -355,30 +319,27 @@ public class SearchFragment extends Fragment {
             case REQUEST_IMAGE_PICK:
                 if (resultCode == RESULT_OK) {
 
-
                     Uri selectedImage = data.getData();
+
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
                     if (selectedImage != null) {
                         Cursor cursor = getContext().getContentResolver().query(selectedImage,
                                 filePathColumn, null, null, null);
                         if (cursor != null) {
-                            cursor.moveToFirst();
 
+                            cursor.moveToFirst();
                             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                             currentPhotoPath = cursor.getString(columnIndex);
                             cursor.close();
                             updateImage();
 
-
                         }
-
                     }
                 }
                 break;
         }
     }
-
-
 
 
     @Override
@@ -391,7 +352,7 @@ public class SearchFragment extends Fragment {
                     Log.v("Success", "Permissions granted");
 
                 } else {
-                    //do something like displaying a message that he didn`t allow the app to access gallery and you wont be able to let him select from gallery
+                    // TODO permission not granted, inform user about it
                 }
                 break;
         }
@@ -401,12 +362,9 @@ public class SearchFragment extends Fragment {
     public void updateImage() {
 
         Bitmap imageBitmap = BitmapFactory.decodeFile(currentPhotoPath);
-
         imageBitmap = ImageUtils.imageOrientationFixer(imageBitmap, currentPhotoPath);
 
-
         searchViewModel.setImageToSearch(imageBitmap);
-
 
     }
 
@@ -425,8 +383,6 @@ public class SearchFragment extends Fragment {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PICK_FROM_GALLERY_PERMISSION);
             } else {
                 // permissions are already granted
-                //dispatchPickPictureIntent();
-                int stop = 0;
             }
         } catch (Exception e) {
             e.printStackTrace();
