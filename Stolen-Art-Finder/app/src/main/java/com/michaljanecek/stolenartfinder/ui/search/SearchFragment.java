@@ -16,12 +16,14 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +37,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.michaljanecek.stolenartfinder.R;
 import com.michaljanecek.stolenartfinder.helpers.ImageUtils;
 import com.michaljanecek.stolenartfinder.models.FoundPaintingModel;
+import com.michaljanecek.stolenartfinder.models.Painting;
 import com.michaljanecek.stolenartfinder.networking.APIClient;
 import com.michaljanecek.stolenartfinder.networking.SearchDBService;
 
@@ -42,6 +45,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -85,9 +89,18 @@ public class SearchFragment extends Fragment {
     private Button uploadToServerButton;
     private ImageView imageToSearch;
     private ProgressBar progressBar;
+    private TextView progressBarLabel;
 
     String currentPhotoPath;
     List<FoundPaintingModel> foundPaintings;
+
+    enum UploadPhase {
+        PREUPLOAD,
+        UPLOADING,
+        DOWNLOADING_RESULT,
+        POSTUPLOAD,
+        FAILED
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -100,6 +113,7 @@ public class SearchFragment extends Fragment {
         uploadToServerButton = root.findViewById(R.id.button_post_upload);
         imageToSearch = root.findViewById(R.id.image_to_search);
         progressBar = root.findViewById(R.id.progress_bar);
+        progressBarLabel = root.findViewById(R.id.progress_bar_label);
 
         setOnClickListeners();
 
@@ -136,17 +150,25 @@ public class SearchFragment extends Fragment {
 
     private void newImageDownloaded() {
 
-        progressBar.setVisibility(View.INVISIBLE);
-        List<Bitmap> images = searchViewModel.getFoundImages().getValue();
+
+        setUploadPhase(UploadPhase.POSTUPLOAD);
+
+        List<Pair<Integer, Bitmap>> images = searchViewModel.getFoundImages().getValue();
 
         if (images == null || images.isEmpty())
             return;
 
-        imageToSearch.setImageBitmap(images.get(0));
+        int foundPaintingId = images.get(0).first;
+        Bitmap foundPainting = images.get(0).second;
+
+        launchFoundPaintingDetailFragment(foundPainting, foundPaintingId);
+        launchFoundPaintingDetailFragment(foundPainting, foundPaintingId);
+
+        //imageToSearch.setImageBitmap(images.get(0));
 
     }
 
-    private void downloadImage(String fromUrl) {
+    private void downloadImage(String fromUrl, int id) {
 
 
         HandlerThread ht = new HandlerThread("MyHandlerThread");
@@ -158,7 +180,8 @@ public class SearchFragment extends Fragment {
                 Bitmap downloadedImage = (Bitmap) msg.obj;
 
                 // Do things on UI thread HERE
-                searchViewModel.updateFoundImages(downloadedImage);
+
+                searchViewModel.updateFoundImages(downloadedImage, id);
 
             }
         };
@@ -194,15 +217,17 @@ public class SearchFragment extends Fragment {
         if (foundPaintings == null) {
 
             //TODO tell the user that no matches were found
-            progressBar.setVisibility(View.INVISIBLE);
+            setUploadPhase(UploadPhase.POSTUPLOAD);
             return;
         }
+
+        setUploadPhase(UploadPhase.DOWNLOADING_RESULT);
 
         for (FoundPaintingModel found : foundPaintings) {
 
             String imageUrl = found.getImageUrl();
 
-            downloadImage(imageUrl);
+            downloadImage(imageUrl, found.getId());
 
         }
 
@@ -210,7 +235,10 @@ public class SearchFragment extends Fragment {
 
 
     private void uploadToServer() {
-        progressBar.setVisibility(View.VISIBLE);
+
+        setUploadPhase(UploadPhase.UPLOADING);
+
+
         File file = new File(currentPhotoPath);
 
         RequestBody requestFile =
@@ -245,13 +273,42 @@ public class SearchFragment extends Fragment {
             @Override
             public void onFailure(Call<List<FoundPaintingModel>> call, Throwable t) {
 
-                progressBar.setVisibility(View.INVISIBLE);
+                setUploadPhase(UploadPhase.FAILED);
                 Log.e("Ex", "Exception: " + Log.getStackTraceString(t));
                 Toast.makeText(getContext(), "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
             }
         });
 
 
+
+    }
+
+    private void launchFoundPaintingDetailFragment(Bitmap foundPainting, int id){
+
+        FoundPaintingDetailFragment nextFrag = new FoundPaintingDetailFragment();
+
+        // the original instance returned from server (including all info - name, id, imageurl... but not the Bitmap)
+        FoundPaintingModel fpm = null;
+
+        for (FoundPaintingModel f: foundPaintings){
+            if (f.getId()==id){
+                fpm = f;
+                break;
+            }
+        }
+
+        Painting foundPaintingWithInfo = new Painting(foundPainting, fpm);
+
+        Bundle b = new Bundle();
+        b.putParcelable(FoundPaintingDetailFragment.foundPaintingParamKey, foundPaintingWithInfo);
+
+        nextFrag.setArguments(b);
+
+
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.nav_host_fragment, nextFrag, "findThisFragment")
+                .addToBackStack(null)
+                .commit();
 
     }
 
@@ -300,6 +357,41 @@ public class SearchFragment extends Fragment {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         }
+    }
+
+    private void setUploadPhase(UploadPhase phase){
+
+        switch (phase){
+            case PREUPLOAD:
+                progressBar.setVisibility(View.INVISIBLE);
+                progressBarLabel.setVisibility(View.INVISIBLE);
+                break;
+
+            case UPLOADING:
+                imageToSearch.setImageBitmap(null);
+                progressBar.setVisibility(View.VISIBLE);
+                progressBarLabel.setVisibility(View.VISIBLE);
+                progressBarLabel.setText(getString(R.string.uploading_progress_label));
+                break;
+
+            case DOWNLOADING_RESULT:
+                progressBar.setVisibility(View.VISIBLE);
+                progressBarLabel.setVisibility(View.VISIBLE);
+                progressBarLabel.setText(getString(R.string.downloading_progress_label));
+                break;
+
+            case POSTUPLOAD:
+                progressBar.setVisibility(View.INVISIBLE);
+                progressBarLabel.setVisibility(View.INVISIBLE);
+                break;
+
+            case FAILED:
+                progressBar.setVisibility(View.INVISIBLE);
+                progressBarLabel.setVisibility(View.INVISIBLE);
+                Toast.makeText(getContext(), "Something went wrong... Please try later!", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
     }
 
     @Override

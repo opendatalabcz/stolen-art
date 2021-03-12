@@ -1,6 +1,7 @@
 package com.michaljanecek.stolenartfinder.ui.search;
 
 import android.graphics.Bitmap;
+import android.util.Pair;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -15,8 +16,8 @@ public class SearchViewModel extends ViewModel {
 
     private MutableLiveData<Bitmap> imageToSearch;
 
-    private ArrayList<Bitmap> foundImagesList = new ArrayList<Bitmap>();
-    private MutableLiveData<List<Bitmap>> foundImages;
+    private ArrayList<Pair<Integer, Bitmap> > foundImagesList = new ArrayList<>();
+    private MutableLiveData<List<Pair<Integer, Bitmap>>> foundImages;
 
     public SearchViewModel() {
         imageToSearch = new MutableLiveData<>();
@@ -36,14 +37,16 @@ public class SearchViewModel extends ViewModel {
 
     }
 
-    public LiveData<List<Bitmap>> getFoundImages() {
+    public LiveData<List<Pair<Integer, Bitmap>>> getFoundImages() {
         return foundImages;
     }
 
-    public void updateFoundImages(Bitmap image){
+    public void updateFoundImages(Bitmap image, Integer id){
+
+        Pair<Integer, Bitmap> downloadedImageWithId = new Pair<>(id, image);
 
         // add the newly downloaded image to a classic list
-        foundImagesList.add(image);
+        foundImagesList.add(downloadedImageWithId);
 
         // update the live data with the udpated list, no need to create new list
         foundImages.postValue(foundImagesList);
