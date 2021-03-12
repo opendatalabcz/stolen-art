@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.michaljanecek.stolenartfinder.R;
 import com.michaljanecek.stolenartfinder.models.Painting;
@@ -22,6 +23,7 @@ public class FoundPaintingDetailFragment extends Fragment {
     public static final String foundPaintingParamKey = "foundPainting";
     private Painting painting;
     private ImageView foundPaintingView;
+    private TextView foundPaintingNameView;
 
     public FoundPaintingDetailFragment() {
         // Required empty public constructor
@@ -47,6 +49,8 @@ public class FoundPaintingDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_found_painting_detail, container, false);
 
         foundPaintingView = view.findViewById(R.id.found_painting_view);
+        foundPaintingNameView = view.findViewById(R.id.painting_name_view);
+
         setPaintingInfo();
 
         return view;
@@ -54,7 +58,12 @@ public class FoundPaintingDetailFragment extends Fragment {
 
     private void setPaintingInfo(){
 
+        // the painting (Bitmap)
         foundPaintingView.setImageBitmap(painting.getPainting());
+
+        // the name of the painting
+
+        foundPaintingNameView.setText(painting.getName());
 
     }
 

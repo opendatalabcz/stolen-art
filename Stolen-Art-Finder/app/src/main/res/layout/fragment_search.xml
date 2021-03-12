@@ -7,10 +7,23 @@
     android:layout_marginBottom="?attr/actionBarSize"
     tools:context=".ui.search.SearchFragment">
 
+
+    <TextView
+        android:id="@+id/instructions_view"
+        android:layout_width="236dp"
+        android:layout_height="49dp"
+        android:gravity="center"
+        android:text="@string/instructions"
+        app:layout_constraintBottom_toTopOf="@+id/button_post_upload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/image_to_search"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/image_to_search_description"
         app:layout_constraintBottom_toTopOf="@+id/button_take_picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,14 +36,15 @@
         android:id="@+id/button_post_upload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/upload_to_server"
+        android:text="@string/search"
+        android:drawableLeft="@drawable/ic_baseline_search_24_white"
         app:layout_constraintBottom_toTopOf="@+id/button_take_picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <Button
+    <!-- Button
         android:id="@+id/button_take_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,27 +53,47 @@
         app:layout_constraintBottom_toTopOf="@+id/button_upload_picture"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0" / -->
 
-    <Button
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_take_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:layout_marginStart="116dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/take_a_picture"
+        android:src="@drawable/ic_baseline_photo_camera_32"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_upload_picture"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button_upload_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/upload_from_gallery"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="92dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/upload_from_gallery"
+        android:src="@drawable/ic_baseline_photo_library_32"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.974" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button_take_picture" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
-        android:translationZ="90dp"
         style="?android:attr/progressBarStyle"
-        android:indeterminate="true"
-        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:translationZ="90dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/button_post_upload"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

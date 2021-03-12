@@ -63,6 +63,11 @@ public class Painting implements Parcelable {
     }
 
     public String getName() {
+
+        if(name.equals("")){
+            return "Unknown name";
+        }
+
         return name;
     }
 

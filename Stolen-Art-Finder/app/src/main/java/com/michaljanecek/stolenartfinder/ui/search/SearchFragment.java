@@ -34,6 +34,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.michaljanecek.stolenartfinder.R;
 import com.michaljanecek.stolenartfinder.helpers.ImageUtils;
 import com.michaljanecek.stolenartfinder.models.FoundPaintingModel;
@@ -84,12 +85,13 @@ public class SearchFragment extends Fragment {
 
     private SearchViewModel searchViewModel;
 
-    private Button takePicButton;
-    private Button uploadPicButton;
+    private FloatingActionButton takePicButton;
+    private FloatingActionButton uploadPicButton;
     private Button uploadToServerButton;
     private ImageView imageToSearch;
     private ProgressBar progressBar;
     private TextView progressBarLabel;
+    private TextView instructionsView;
 
     String currentPhotoPath;
     List<FoundPaintingModel> foundPaintings;
@@ -99,7 +101,8 @@ public class SearchFragment extends Fragment {
         UPLOADING,
         DOWNLOADING_RESULT,
         POSTUPLOAD,
-        FAILED
+        FAILED,
+        FRESH
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -114,6 +117,7 @@ public class SearchFragment extends Fragment {
         imageToSearch = root.findViewById(R.id.image_to_search);
         progressBar = root.findViewById(R.id.progress_bar);
         progressBarLabel = root.findViewById(R.id.progress_bar_label);
+        instructionsView = root.findViewById(R.id.instructions_view);
 
         setOnClickListeners();
 
@@ -122,6 +126,7 @@ public class SearchFragment extends Fragment {
 
         searchViewModel.getFoundImages().observe(getViewLifecycleOwner(), images -> newImageDownloaded());
 
+        setUploadPhase(UploadPhase.FRESH);
 
         return root;
     }
@@ -150,21 +155,19 @@ public class SearchFragment extends Fragment {
 
     private void newImageDownloaded() {
 
-
-        setUploadPhase(UploadPhase.POSTUPLOAD);
-
         List<Pair<Integer, Bitmap>> images = searchViewModel.getFoundImages().getValue();
 
         if (images == null || images.isEmpty())
             return;
 
+        setUploadPhase(UploadPhase.POSTUPLOAD);
+
+
         int foundPaintingId = images.get(0).first;
         Bitmap foundPainting = images.get(0).second;
 
+        setUploadPhase(UploadPhase.FRESH);
         launchFoundPaintingDetailFragment(foundPainting, foundPaintingId);
-        launchFoundPaintingDetailFragment(foundPainting, foundPaintingId);
-
-        //imageToSearch.setImageBitmap(images.get(0));
 
     }
 
@@ -214,7 +217,7 @@ public class SearchFragment extends Fragment {
 
     private void paintingsFound() {
 
-        if (foundPaintings == null) {
+        if (foundPaintings == null || foundPaintings.isEmpty()) {
 
             //TODO tell the user that no matches were found
             setUploadPhase(UploadPhase.POSTUPLOAD);
@@ -359,10 +362,24 @@ public class SearchFragment extends Fragment {
         }
     }
 
+
+
     private void setUploadPhase(UploadPhase phase){
 
         switch (phase){
+            case FRESH:
+                imageToSearch.setVisibility(View.GONE);
+                uploadToServerButton.setVisibility(View.INVISIBLE);
+                instructionsView.setVisibility(View.VISIBLE);
+                instructionsView.bringToFront();
+                progressBar.setVisibility(View.INVISIBLE);
+                progressBarLabel.setVisibility(View.INVISIBLE);
+                break;
+
             case PREUPLOAD:
+                instructionsView.setVisibility(View.INVISIBLE);
+                imageToSearch.setVisibility(View.VISIBLE);
+                uploadToServerButton.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.INVISIBLE);
                 progressBarLabel.setVisibility(View.INVISIBLE);
                 break;
@@ -386,6 +403,7 @@ public class SearchFragment extends Fragment {
                 break;
 
             case FAILED:
+                instructionsView.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.INVISIBLE);
                 progressBarLabel.setVisibility(View.INVISIBLE);
                 Toast.makeText(getContext(), "Something went wrong... Please try later!", Toast.LENGTH_SHORT).show();
@@ -457,6 +475,7 @@ public class SearchFragment extends Fragment {
         imageBitmap = ImageUtils.imageOrientationFixer(imageBitmap, currentPhotoPath);
 
         searchViewModel.setImageToSearch(imageBitmap);
+        setUploadPhase(UploadPhase.PREUPLOAD);
 
     }
 
