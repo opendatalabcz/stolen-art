@@ -1,4 +1,4 @@
-package com.michaljanecek.stolenartfinder.ui.dashboard;
+package com.michaljanecek.stolenartfinder.ui.reportstolen;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.michaljanecek.stolenartfinder.R;
 
-public class DashboardFragment extends Fragment {
+public class ReportStolenFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private ReportStolenViewModel reportStolenViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        reportStolenViewModel =
+                new ViewModelProvider(this).get(ReportStolenViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_report_stolen, container, false);
         final TextView textView = root.findViewById(R.id.text_dashboard);
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        reportStolenViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

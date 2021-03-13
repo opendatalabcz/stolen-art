@@ -1,14 +1,14 @@
-package com.michaljanecek.stolenartfinder.ui.dashboard;
+package com.michaljanecek.stolenartfinder.ui.reportstolen;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class DashboardViewModel extends ViewModel {
+public class ReportStolenViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public DashboardViewModel() {
+    public ReportStolenViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is dashboard fragment");
     }

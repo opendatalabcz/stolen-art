@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.michaljanecek.stolenartfinder.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:name="com.michaljanecek.stolenartfinder.ui.reportstolen.ReportStolenFragment"
+        android:label="@string/title_report_stolen"
+        tools:layout="@layout/fragment_report_stolen" />
 
     <fragment
         android:id="@+id/navigation_notifications"
