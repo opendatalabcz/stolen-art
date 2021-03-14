@@ -9,6 +9,13 @@
     <string name="upload_from_gallery">Upload from gallery</string>
     <string name="search">Search!</string>
 
+    <string name="painting_name">Painting name</string>
+    <string name="painting_name_hint">Mona lisa</string>
+    <string name="report_button">Report</string>
+    <string name="report_instructions">To upload a new painting to out database, please fill in as much information as possible.</string>
+    <string name="stolen_painting_description">Stolen painting to be reported</string>
+    <string name="title_report_stolen_fragment">Report new stolen painting</string>
+
     <string name="image_to_search_description">Is this painting stolen?</string>
 
     <string name="uploading_progress_label">Uploading your painting…</string>

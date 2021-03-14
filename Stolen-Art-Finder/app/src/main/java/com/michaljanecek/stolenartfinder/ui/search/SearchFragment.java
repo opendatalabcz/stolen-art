@@ -142,12 +142,6 @@ public class SearchFragment extends Fragment {
 
         });
 
-        uploadPicButton.setOnClickListener(v -> {
-
-            checkStoragePermissions();
-            dispatchPickPictureIntent();
-
-        });
 
         uploadToServerButton.setOnClickListener(v -> uploadToServer());
 
