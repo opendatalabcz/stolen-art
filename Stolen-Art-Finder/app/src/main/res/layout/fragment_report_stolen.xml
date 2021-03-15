@@ -14,8 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:layout_marginStart="12dp"
         android:text="@string/title_report_stolen_fragment"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -37,22 +37,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:layout_marginStart="16dp"
         android:text="@string/painting_name"
         app:layout_constraintEnd_toStartOf="@+id/painting_name_edit_text"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"></TextView>
+        app:layout_constraintTop_toBottomOf="@+id/textView3"/>
 
     <EditText
         android:id="@+id/painting_name_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/painting_name_hint"
+        android:layout_marginStart="24dp"
         app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/textView"></EditText>
+        app:layout_constraintTop_toTopOf="@+id/textView"/>
 
 
     <Button
@@ -63,7 +64,7 @@
         android:text="@string/report_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"></Button>
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <ImageView
         android:id="@+id/reported_painting"
