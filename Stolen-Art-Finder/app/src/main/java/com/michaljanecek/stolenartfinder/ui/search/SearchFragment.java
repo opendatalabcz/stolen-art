@@ -124,7 +124,7 @@ public class SearchFragment extends Fragment {
 
         searchViewModel.getImageToSearch().observe(getViewLifecycleOwner(), image -> imageToSearch.setImageBitmap(image));
 
-        searchViewModel.getFoundImages().observe(getViewLifecycleOwner(), images -> newImageDownloaded());
+        searchViewModel.getFoundImages().observe(getViewLifecycleOwner(), this::newImageDownloaded);
 
         setUploadPhase(UploadPhase.FRESH);
 
@@ -147,9 +147,8 @@ public class SearchFragment extends Fragment {
 
     }
 
-    private void newImageDownloaded() {
+    private void newImageDownloaded(List<Pair<Integer, Bitmap>> images) {
 
-        List<Pair<Integer, Bitmap>> images = searchViewModel.getFoundImages().getValue();
 
         if (images == null || images.isEmpty())
             return;
@@ -213,7 +212,8 @@ public class SearchFragment extends Fragment {
 
         if (foundPaintings == null || foundPaintings.isEmpty()) {
 
-            //TODO tell the user that no matches were found
+            //TODO tell the user that no matches were found, better
+            Toast.makeText(getContext(), "Sorry, we do not recognize this painting.", Toast.LENGTH_SHORT).show();
             setUploadPhase(UploadPhase.POSTUPLOAD);
             return;
         }

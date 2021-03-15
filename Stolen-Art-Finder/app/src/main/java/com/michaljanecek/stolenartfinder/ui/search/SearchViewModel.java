@@ -45,6 +45,9 @@ public class SearchViewModel extends ViewModel {
 
         Pair<Integer, Bitmap> downloadedImageWithId = new Pair<>(id, image);
 
+        //TODO remove this line if you want to have more images in the list
+        foundImagesList.clear();
+
         // add the newly downloaded image to a classic list
         foundImagesList.add(downloadedImageWithId);
 
