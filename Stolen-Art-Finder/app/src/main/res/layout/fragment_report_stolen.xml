@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="?attr/actionBarSize"
-    tools:context=".ui.reportstolen.ReportStolenFragment">
+    tools:context=".ui.reportstolen.ReportStolenFragment"
+    android:background="@color/cardview_light_background"
+    >
 
 
     <TextView

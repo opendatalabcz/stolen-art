@@ -156,6 +156,12 @@ public class ReportStolenFragment extends Fragment {
 
     private void uploadToServer() {
 
+        if(currentPhotoPath == null)
+        {
+            Toast.makeText(getContext(), "Please select an image to upload.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         File file = new File(currentPhotoPath);
 
         RequestBody requestFile =
