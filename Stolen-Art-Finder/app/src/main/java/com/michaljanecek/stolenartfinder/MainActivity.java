@@ -54,4 +54,10 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         return true;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.clear();
+    }
+
 }

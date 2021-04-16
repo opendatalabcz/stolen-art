@@ -36,6 +36,8 @@ public class Painting implements Parcelable {
 
         name = parcel.readString();
 
+
+
     }
 
     //used when un-parceling our parcel (creating the object)

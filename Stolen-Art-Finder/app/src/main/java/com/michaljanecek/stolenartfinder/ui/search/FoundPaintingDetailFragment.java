@@ -77,6 +77,13 @@ public class FoundPaintingDetailFragment extends Fragment {
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle oldInstanceState)
+    {
+        super.onSaveInstanceState(oldInstanceState);
+        oldInstanceState.clear();
+    }
+
 
 
 }
