@@ -28,6 +28,8 @@ class DataLoader:
         arr_img = np.array(pil_img)
         cv_image = cv2.cvtColor(arr_img, cv2.COLOR_RGB2BGR)
 
+        cv2.imwrite("last_received_image.jpg", cv_image)
+
         return cv_image
 
     def load_descriptors_from_db():

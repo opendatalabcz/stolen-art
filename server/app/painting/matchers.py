@@ -10,7 +10,6 @@ def get_best_matches(found_painting_descriptor, all_descriptors, n_nearest=1):
 
 def get_nearest_matches_flann(found_painting_descriptor, all_descriptors, n_nearest=1, k = 2, min_matches = 10):
 
-
     # 1. parametr FlannBasedMatcheru
     FLANN_INDEX_LSH = 6
     index_params= dict(algorithm = FLANN_INDEX_LSH,
@@ -38,7 +37,7 @@ def get_nearest_matches_flann(found_painting_descriptor, all_descriptors, n_near
         # TODO - this was lazy fixed
         if found_painting_descriptor is None or len(found_painting_descriptor) <= k or curr_stolen_descriptors is None or len(curr_stolen_descriptors) <= k:
             best_match_index = -1
-            break
+            continue
         
         # Cross check parametr
         flann = cv2.FlannBasedMatcher(index_params, search_params)
@@ -69,7 +68,5 @@ def get_nearest_matches_flann(found_painting_descriptor, all_descriptors, n_near
         # print("Pocet prijatelnych matchu: ", ok_matches_num)
 
     best_matches_indices = dict(sorted(matches_count.items(), key = lambda g: (g[1]), reverse = True)[:n_nearest]).keys()
-
-
         
     return best_matches_indices

@@ -57,12 +57,7 @@ class SearchPaintingViewSet(viewsets.GenericViewSet,
         uploaded_image = serializer.validated_data.get("image")
         
         similar_ids = find_similar(uploaded_image, k)
-        #similar_ids = [5,6,7]
         
-        
-        # testing custom return
-        #time.sleep(3)
-
         similar_paintings = Painting.objects.filter(pk__in=similar_ids).values()
 
 
