@@ -62,8 +62,7 @@ def get_nearest_matches_flann(found_painting_descriptor, all_descriptors, n_near
                 ok_matches_num = ok_matches_num + 1 
         
         matches_count[p_index] = ok_matches_num
-        
-    
+
         
         # print("Pocet prijatelnych matchu: ", ok_matches_num)
 
