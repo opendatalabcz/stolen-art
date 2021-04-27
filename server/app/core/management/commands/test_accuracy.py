@@ -15,7 +15,7 @@ class Command(BaseCommand):
 
         # Positional arguments
         parser.add_argument('directory_name', nargs='+', type=str)
-
+        
 
     def handle(self, *args, **kwargs):
         """Handle the command"""

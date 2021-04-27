@@ -19,6 +19,8 @@ class DataLoader:
         paintings_paths = list(data_dir.glob('*'))
         paintings_paths = [str(path) for path in paintings_paths]
 
+        paintings_paths = sorted(paintings_paths)
+
         return paintings_paths
 
 

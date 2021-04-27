@@ -39,6 +39,8 @@ def save_images_to_db(paintings_paths):
         d.save()
 
         counter = counter + 1
+        if counter == 1800:
+            break
         
 
 

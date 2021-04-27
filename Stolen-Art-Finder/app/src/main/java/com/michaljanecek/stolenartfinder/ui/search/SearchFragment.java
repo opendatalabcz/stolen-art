@@ -241,19 +241,15 @@ public class SearchFragment extends Fragment {
         RequestBody requestFile =
                 RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
-        // MultipartBody.Part is used to send also the actual file name
+        // MultipartBody.Part is used to send the actual filename
         MultipartBody.Part body =
                 MultipartBody.Part.createFormData("image", file.getName(), requestFile);
-
-        // add another part within the multipart request
-        RequestBody fullName =
-                RequestBody.create(MediaType.parse("multipart/form-data"), "Your Name");
 
 
         RequestBody k = RequestBody.create(MultipartBody.FORM, "1");
 
-        SearchDBService service = APIClient.getRetrofitInstance().create(SearchDBService.class);
 
+        SearchDBService service = APIClient.getRetrofitInstance().create(SearchDBService.class);
 
         Call<List<FoundPaintingModel>> call = service.searchByPainting(body, k);
 

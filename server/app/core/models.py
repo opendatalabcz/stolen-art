@@ -5,7 +5,7 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
 def painting_image_file_path(instance, filename):
-    """Generate file path for new painting image"""
+    """Generate a file path for new painting image"""
     ext = filename.split('.')[-1]
     filename = f'{uuid.uuid4()}.{ext}'
     return os.path.join('uploads/painting/', filename)

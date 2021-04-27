@@ -12,36 +12,65 @@ def process_dir_to_array(directory):
     
 def test_accuracy_from_dir(directory):
 
+    # get the paths of the paintings that are going to be tested
     paintings_paths = dl.get_paths(directory)
+
+    # load the descriptor of the paintings that are currently in the DB
     descriptors_from_db = dl.load_descriptors_from_db()
-    print(len(descriptors_from_db))
+
+    # set metrics counters to 0
+    correct_found = 0
+    incorrect_found = 0
+    not_found = 0
 
     counter = 0
+
+
     for path in paintings_paths:
         image = ORBHelper().load_and_preprocess(path)
-        painting_name = path.split('/')[-1][4:] 
+        # remove _aug prefix and .jpg postfix
+        painting_name = path.split('/')[-1][4:].split('.')[0] 
 
         descriptors = ORBHelper().detect_and_compute(image,return_keypoints=False)
 
         best_match_id = get_best_matches(descriptors, descriptors_from_db)
-        print(f"Best match ID: {best_match_id}")
         best_match = Painting.objects.filter(pk__in=best_match_id).values()
         
         found_painting_name = ""
-        found_ok = 0
+
         if len(best_match) > 0:
             found_painting_name = best_match[0]['name']
             print(f"Best match for {painting_name} is {found_painting_name}")
             if found_painting_name == painting_name:
-                found_ok += 1
-
+                correct_found += 1
+            else:
+                incorrect_found += 1
+        
+        else:
+            not_found += 1
 
         
         counter+=1
-        if counter % 100:
+        if counter % 25:
+            all = (correct_found + incorrect_found + not_found)
+            accuracy = correct_found / all
             print(f"Still testing... Tested: {counter}")
+            print(f"Paintings found correctly: {correct_found} -- {accuracy*100} %")
+            print(f"Paintings founc incorrectly: {incorrect_found} -- {(incorrect_found / all) * 100} %")
+            print(f"Paintings not found: {not_found} -- {(not_found / all) * 100} %")
 
-    print(f"Correctly found {found_ok} from {len(paintings_paths)}")
+
+        if counter == 250:
+            break
+
+    all = (correct_found + incorrect_found + not_found)
+
+    accuracy = correct_found / all
+
+
+    print(f"Paintings found correctly: {correct_found} -- {accuracy*100} %")
+    print(f"Paintings founc incorrectly: {incorrect_found} -- {(incorrect_found / all) * 100} %")
+    print(f"Paintings not found: {not_found} -- {(not_found / all) * 100} %")
         
 
 
@@ -56,7 +85,5 @@ def find_similar(uploaded_image, n_nearest=1):
     orbh = ORBHelper()
     best_matches = get_best_matches(image_descriptors, descriptors_from_db, n_nearest=n_nearest)
 
-
-    #simple_match_test(image_descriptors, descriptors_from_db[2])
 
     return best_matches

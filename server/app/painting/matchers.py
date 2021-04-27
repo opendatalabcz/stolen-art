@@ -10,62 +10,100 @@ def get_best_matches(found_painting_descriptor, all_descriptors, n_nearest=1):
 
 def get_nearest_matches_flann(found_painting_descriptor, all_descriptors, n_nearest=1, k = 2, min_matches = 10):
 
-    # 1. parametr FlannBasedMatcheru
-    FLANN_INDEX_LSH = 6
-    index_params= dict(algorithm = FLANN_INDEX_LSH,
-                    table_number = 6, # 12
-                    key_size = 12,     # 20
-                    multi_probe_level = 1) #2
-
-    # 2. parametr FlannBasedMatcheru
-    search_params = dict(checks=50)   # or pass empty dictionary
-
     matches_count = {}
     matches_count[-1] = 0
-    
-    matches = {}
-    matches[-1] = None
-    
-    matches_masks = {}
-    matches_masks[-1] = None
-    
+        
+    matcher = Flann()
     
     for p_index, curr_stolen_descriptors in all_descriptors.items():
         
         curr_stolen_descriptors = np.array(curr_stolen_descriptors)
 
-        # TODO - this was lazy fixed
+        # if there are not enough features, continue
         if found_painting_descriptor is None or len(found_painting_descriptor) <= k or curr_stolen_descriptors is None or len(curr_stolen_descriptors) <= k:
             best_match_index = -1
             continue
         
-        # Cross check parametr
-        flann = cv2.FlannBasedMatcher(index_params, search_params)
 
-        # Perform the matching between the ORB descriptors of the training image and the test image
+        matches_count[p_index] = matcher.get_good_matches_number(found_painting_descriptor, curr_stolen_descriptors, k)
 
-        matches[p_index] = flann.knnMatch(curr_stolen_descriptors, found_painting_descriptor, k)
-        # deskriptor = "fingerprint" keypointu, vektor 0 a 1, napr. BRIEF rozmaze misto a z toho spocita vektor
-        # ORB muze pouzivat rBRIEF, tzn. pocita i s rotaci obrazu
 
+    best_matches_indices = list(dict(sorted(matches_count.items(), key = lambda g: (g[1]), reverse = True)[:n_nearest]).keys())
+    print(best_matches_indices)
+    for index in best_matches_indices:
+        if matches_count[index] < min_matches:
+            best_matches_indices.remove(index)
+
+    return best_matches_indices
+
+
+class Flann:
+
+
+    def __init__(self):
+        
+         # FLANN BASED MATCHER parameters
+
+        FLANN_INDEX_LSH = 6
+        index_params = dict(algorithm = FLANN_INDEX_LSH,
+                    table_number = 6, # 12
+                    key_size = 12,     # 20
+                    multi_probe_level = 1) #2
+
+        search_params = dict(checks=50)   # or pass empty dictionary
+
+
+        self.matcher = cv2.FlannBasedMatcher(index_params, search_params) 
+    
+    def get_good_matches_number(self, desc1, desc2, k):
+        
+        matches = self.matcher.knnMatch(desc1, desc2, k)
         ok_matches_num = 0
 
-        # Need to draw only good matches, so create a mask
-        matches_masks[p_index] = [[0,0] for i in range(len(matches[p_index]))]
         # ratio test as per Lowe's paper
-        for i, candidates in enumerate(matches[p_index]):
+        for i, candidates in enumerate(matches):
+            
             if (len(candidates)<2):
-                continue # nedostatek bodu pro porovnani
+                continue # not enough features for comparison
+
             m, n = candidates    
             if m.distance < 0.7*n.distance:
-                matches_masks[p_index][i]=[1,0]
                 ok_matches_num = ok_matches_num + 1 
         
-        matches_count[p_index] = ok_matches_num
+        return ok_matches_num
 
-        
-        # print("Pocet prijatelnych matchu: ", ok_matches_num)
 
-    best_matches_indices = dict(sorted(matches_count.items(), key = lambda g: (g[1]), reverse = True)[:n_nearest]).keys()
+class Brute:
+
+
+    def __init__(self, crossCheck = True):
         
-    return best_matches_indices
+        self.matcher = cv2.BFMatcher(cv2.NORM_HAMMING2, crossCheck = crossCheck)
+        self.crossCheck = True
+
+    def get_good_matches_number(self, desc1, desc2, k):
+        
+        ok_matches_num = 0
+
+
+        if not self.crossCheck:
+
+            matches = self.matcher.knnMatch(desc1, desc2, 1)
+
+            # ratio test as per Lowe's paper
+            for i, candidates in enumerate(matches):
+                
+                if (len(candidates)<2):
+                    continue # not enough features for comparison
+
+                m, n = candidates    
+                if m.distance < 0.7*n.distance:
+                    ok_matches_num = ok_matches_num + 1 
+            
+            return ok_matches_num
+        
+        else:
+
+            matches = self.matcher.match(desc1, desc2)
+            
+            return len(matches)

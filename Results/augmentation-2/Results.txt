@@ -1,0 +1,42 @@
+Whole dataset of non-augmented paintings were uploaded to the database.
+Then 250 queries with augmented paintings were made.
+
+RESULTS:
+
+1] Tate oil on canvas
+
+Paintings found correctly: 174 -- 73.6 %
+Paintings founc incorrectly: 71 -- 24.4 %
+Paintings not found: 5 -- 2.0 %
+
+
+2] Tate screenprint on paper
+
+Paintings found correctly: 101 -- 40.4 %
+Paintings founc incorrectly: 142 -- 56.8 %
+Paintings not found: 7 -- 2.8000000000000003 %
+
+
+3] Tate lithograph on paper
+
+Paintings found correctly: 120 -- 48.0 %
+Paintings founc incorrectly: 126 -- 50.4 %
+Paintings not found: 4 -- 1.6 %
+
+
+4] Tate watercolour on paper
+
+Paintings found correctly: 140 -- 56.00000000000001 %
+Paintings founc incorrectly: 99 -- 39.6 %
+Paintings not found: 11 -- 4.3999999999999995 %
+
+
+5] All above merged
+
+Paintings found correctly: 119 -- 47.6 %
+Paintings founc incorrectly: 115 -- 46.0 %
+Paintings not found: 16 -- 6.4 %
+
+
+
+
