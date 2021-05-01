@@ -43,9 +43,6 @@ public class FoundPaintingDetailFragment extends Fragment {
 
     }
 
-    // vyfoceny
-    // operacni system android
-    // 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

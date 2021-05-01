@@ -7,13 +7,11 @@ import android.graphics.BitmapFactory;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.michaljanecek.stolenartfinder.R;
 
 public class ReportStolenViewModel extends AndroidViewModel {
 
-    private MutableLiveData<String> mText;
     private MutableLiveData<Bitmap> paintingToUpload;
 
     public ReportStolenViewModel(Application application) {
@@ -23,10 +21,6 @@ public class ReportStolenViewModel extends AndroidViewModel {
                 R.drawable.placeholder);
         paintingToUpload = new MutableLiveData<>();
         paintingToUpload.setValue(placeholder);
-    }
-
-    public LiveData<String> getText() {
-        return mText;
     }
 
     public LiveData<Bitmap> getPaintingToUpload() {

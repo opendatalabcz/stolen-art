@@ -22,6 +22,7 @@
     <string name="uploading_progress_label">Uploading your painting…</string>
     <string name="downloading_progress_label">Downloading the results…</string>
     <string name="painting_is_stolen">This painting probably has been stolen!</string>
+    <string name="png">Required permission were not granted. Now add them manually in the settings, or quit using the app.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

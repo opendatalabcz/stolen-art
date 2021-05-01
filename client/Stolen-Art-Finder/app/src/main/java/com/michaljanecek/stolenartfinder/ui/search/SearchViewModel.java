@@ -14,10 +14,10 @@ public class SearchViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    private MutableLiveData<Bitmap> imageToSearch;
+    private final MutableLiveData<Bitmap> imageToSearch;
 
-    private ArrayList<Pair<Integer, Bitmap> > foundImagesList = new ArrayList<>();
-    private MutableLiveData<List<Pair<Integer, Bitmap>>> foundImages;
+    private final ArrayList<Pair<Integer, Bitmap> > foundImagesList = new ArrayList<>();
+    private final MutableLiveData<List<Pair<Integer, Bitmap>>> foundImages;
 
     public SearchViewModel() {
         imageToSearch = new MutableLiveData<>();
@@ -45,7 +45,7 @@ public class SearchViewModel extends ViewModel {
 
         Pair<Integer, Bitmap> downloadedImageWithId = new Pair<>(id, image);
 
-        //TODO remove this line if you want to have more images in the list
+        // remove this line if you want to have more images in the list
         foundImagesList.clear();
 
         // add the newly downloaded image to a classic list

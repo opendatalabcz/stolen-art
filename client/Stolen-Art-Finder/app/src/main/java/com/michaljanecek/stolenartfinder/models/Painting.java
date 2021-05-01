@@ -2,14 +2,10 @@ package com.michaljanecek.stolenartfinder.models;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.ByteArrayOutputStream;
-
-import kotlin.UByteArray;
-
 
 public class Painting implements Parcelable {
 
@@ -36,11 +32,9 @@ public class Painting implements Parcelable {
 
         name = parcel.readString();
 
-
-
     }
 
-    //used when un-parceling our parcel (creating the object)
+    //used when un-parceling painting (creating the object)
     public static final Parcelable.Creator<Painting> CREATOR = new Parcelable.Creator<Painting>(){
 
         @Override
@@ -54,7 +48,7 @@ public class Painting implements Parcelable {
         }
     };
 
-    //return hashcode of object
+    //return hashcode
     public int describeContents() {
         return hashCode();
     }

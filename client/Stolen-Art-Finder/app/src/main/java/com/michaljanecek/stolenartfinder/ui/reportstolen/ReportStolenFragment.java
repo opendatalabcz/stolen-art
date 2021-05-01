@@ -47,6 +47,8 @@ import static android.app.Activity.RESULT_OK;
 public class ReportStolenFragment extends Fragment {
 
     static final int REQUEST_IMAGE_PICK = 2;
+
+    // path to currently selected photo
     String currentPhotoPath;
 
     private ReportStolenViewModel reportStolenViewModel;
@@ -67,18 +69,10 @@ public class ReportStolenFragment extends Fragment {
         reportButton = root.findViewById(R.id.report_button);
         reportedPainting = root.findViewById(R.id.reported_painting);
 
-
         reportStolenViewModel.getPaintingToUpload().observe(getViewLifecycleOwner(), image -> reportedPainting.setImageBitmap(image));
 
-        /*final TextView textView = root.findViewById(R.id.text_dashboard);
-        reportStolenViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });*/
-
         setOnClickListeners();
+
         return root;
     }
 
@@ -87,7 +81,7 @@ public class ReportStolenFragment extends Fragment {
         reportedPainting.setOnClickListener(v -> {
 
             if (picked) {
-             // if an image is already picked, a double click is required
+                // if an image is already picked, two clicks are required
                 picked = false;
                 return;
             }
@@ -98,13 +92,15 @@ public class ReportStolenFragment extends Fragment {
 
         reportButton.setOnClickListener(v -> {
 
-            // TODO check that all information is entered correctly !!!!
             uploadToServer();
 
         });
 
     }
 
+    /**
+     * Dispatches an Intent to pick a picture to upload.
+     */
     private void dispatchPickPictureIntent() {
 
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -112,6 +108,12 @@ public class ReportStolenFragment extends Fragment {
 
     }
 
+    /**
+     * Handles the result of activities started by dispatched intents.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -142,6 +144,9 @@ public class ReportStolenFragment extends Fragment {
         }
     }
 
+    /**
+     * Sets the imageView to the selected painting.
+     */
     public void updateImage() {
 
         Bitmap imageBitmap = BitmapFactory.decodeFile(currentPhotoPath);
@@ -153,11 +158,12 @@ public class ReportStolenFragment extends Fragment {
 
     }
 
-
+    /**
+     * Creates the request body, sends it to the server and handles response.
+     */
     private void uploadToServer() {
 
-        if(currentPhotoPath == null)
-        {
+        if (currentPhotoPath == null) {
             Toast.makeText(getContext(), "Please select an image to upload.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -184,11 +190,9 @@ public class ReportStolenFragment extends Fragment {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                //  progressDoalog.dismiss();
 
-            ResponseBody res = response.body();
-            Toast.makeText(getContext(), "Server responded.", Toast.LENGTH_SHORT).show();
-
+                ResponseBody res = response.body();
+                Toast.makeText(getContext(), "Server responded.", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -199,7 +203,6 @@ public class ReportStolenFragment extends Fragment {
                 Toast.makeText(getContext(), "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
             }
         });
-
 
 
     }

@@ -1,6 +1,7 @@
 package com.michaljanecek.stolenartfinder.ui.search;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -58,6 +59,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -175,8 +177,6 @@ public class SearchFragment extends Fragment {
                 super.handleMessage(msg);
                 Bitmap downloadedImage = (Bitmap) msg.obj;
 
-                // Do things on UI thread HERE
-
                 searchViewModel.updateFoundImages(downloadedImage, id);
 
             }
@@ -212,7 +212,6 @@ public class SearchFragment extends Fragment {
 
         if (foundPaintings == null || foundPaintings.isEmpty()) {
 
-            //TODO tell the user that no matches were found, better
             Toast.makeText(getContext(), "Sorry, we do not recognize this painting.", Toast.LENGTH_SHORT).show();
             setUploadPhase(UploadPhase.POSTUPLOAD);
             return;
@@ -256,11 +255,10 @@ public class SearchFragment extends Fragment {
         call.enqueue(new Callback<List<FoundPaintingModel>>() {
             @Override
             public void onResponse(Call<List<FoundPaintingModel>> call, Response<List<FoundPaintingModel>> response) {
-                //  progressDoalog.dismiss();
-
 
                 foundPaintings = response.body();
                 paintingsFound();
+
             }
 
             @Override
@@ -298,7 +296,7 @@ public class SearchFragment extends Fragment {
         nextFrag.setArguments(b);
 
 
-        getActivity().getSupportFragmentManager().beginTransaction()
+        requireActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.nav_host_fragment, nextFrag, "findThisFragment")
                 .addToBackStack(null)
                 .commit();
@@ -308,9 +306,9 @@ public class SearchFragment extends Fragment {
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -329,6 +327,7 @@ public class SearchFragment extends Fragment {
 
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -424,7 +423,7 @@ public class SearchFragment extends Fragment {
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
                     if (selectedImage != null) {
-                        Cursor cursor = getContext().getContentResolver().query(selectedImage,
+                        Cursor cursor = requireContext().getContentResolver().query(selectedImage,
                                 filePathColumn, null, null, null);
                         if (cursor != null) {
 
@@ -443,16 +442,17 @@ public class SearchFragment extends Fragment {
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case PICK_FROM_GALLERY_PERMISSION:
+
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     Log.v("Success", "Permissions granted");
 
                 } else {
-                    // TODO permission not granted, inform user about it
+                    Toast.makeText(getContext(), R.string.png, Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -474,14 +474,14 @@ public class SearchFragment extends Fragment {
         File f = new File(currentPhotoPath);
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
-        getContext().sendBroadcast(mediaScanIntent);
+        requireContext().sendBroadcast(mediaScanIntent);
     }
 
     public void checkStoragePermissions() {
 
         try {
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PICK_FROM_GALLERY_PERMISSION);
+            if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PICK_FROM_GALLERY_PERMISSION);
             } else {
                 // permissions are already granted
             }

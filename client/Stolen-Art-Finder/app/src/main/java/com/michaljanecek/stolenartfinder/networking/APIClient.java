@@ -7,8 +7,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class APIClient {
 
     private static Retrofit retrofit;
+
+    // The URL of the server
     private static final String BASE_URL = "http://85.239.228.102:88/";
 
+    /**
+     * Creates retrofit instance.
+     * @return new or existing retrofit instance
+     */
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
             retrofit = new retrofit2.Retrofit.Builder()
