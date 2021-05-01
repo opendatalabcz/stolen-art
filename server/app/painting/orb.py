@@ -2,10 +2,11 @@ import cv2
 
 
 
-class ORBHelper:
+class ORB:
 
 
-    def __init__(self, n_features=500):
+    def __init__(self, n_features=500, scaleFactor=1.2, nlevels=8, edgeThreshold=31, firstLevel=0, WTA_k=2,
+                        scoreType=cv2.ORB_HARRIS_SCORE, patchSize=31, fastThreshold=20):
         
         self.orb = cv2.ORB_create(nfeatures=n_features)
 

@@ -42,15 +42,21 @@ class Flann:
 
     def __init__(self):
         
-         # FLANN BASED MATCHER parameters
+         # FLANN BASED MATCHER parameters, recommended by
+         # https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_matcher/py_matcher.html
+         # c++ implementation: https://github.com/flann-lib/flann/blob/master/src/cpp/flann/algorithms/lsh_index.h
 
         FLANN_INDEX_LSH = 6
         index_params = dict(algorithm = FLANN_INDEX_LSH,
-                    table_number = 6, # 12
-                    key_size = 12,     # 20
-                    multi_probe_level = 1) #2
+                    table_number = 6, # the number of hash tables to use
+                    key_size = 12, # length of key in hash tables    
+                    multi_probe_level = 1 # number of levels to use in multiprobe
+                    )
 
-        search_params = dict(checks=50)   # or pass empty dictionary
+
+        # number of times the trees in the index will be recursively traverse,
+        # higher = higher precision, but takes more time
+        search_params = dict(checks=50)  
 
 
         self.matcher = cv2.FlannBasedMatcher(index_params, search_params) 
@@ -78,17 +84,17 @@ class Brute:
 
     def __init__(self, crossCheck = True):
         
-        self.matcher = cv2.BFMatcher(cv2.NORM_HAMMING2, crossCheck = crossCheck)
+        self.matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck = crossCheck)
         self.crossCheck = True
 
-    def get_good_matches_number(self, desc1, desc2, k):
+    def get_good_matches_number(self, desc1, desc2):
         
         ok_matches_num = 0
 
 
         if not self.crossCheck:
 
-            matches = self.matcher.knnMatch(desc1, desc2, 1)
+            matches = self.matcher.knnMatch(desc1, desc2, 2) 
 
             # ratio test as per Lowe's paper
             for i, candidates in enumerate(matches):

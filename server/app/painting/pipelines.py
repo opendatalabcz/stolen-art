@@ -1,6 +1,6 @@
 from painting.data_loader import DataLoader as dl
 from painting.data_saver import save_images_to_db
-from painting.orb_helper import ORBHelper
+from painting.orb import ORB
 from painting.matchers import get_best_matches
 from core.models import Painting
 
@@ -27,11 +27,11 @@ def test_accuracy_from_dir(directory):
 
 
     for path in paintings_paths:
-        image = ORBHelper().load_and_preprocess(path)
+        image = ORB().load_and_preprocess(path)
         # remove _aug prefix and .jpg postfix
         painting_name = path.split('/')[-1][4:].split('.')[0] 
 
-        descriptors = ORBHelper().detect_and_compute(image,return_keypoints=False)
+        descriptors = ORB().detect_and_compute(image,return_keypoints=False)
 
         best_match_id = get_best_matches(descriptors, descriptors_from_db)
         best_match = Painting.objects.filter(pk__in=best_match_id).values()
@@ -78,11 +78,11 @@ def test_accuracy_from_dir(directory):
 def find_similar(uploaded_image, n_nearest=1):
 
     image = dl.file_to_image(uploaded_image)
-    image_descriptors = ORBHelper().detect_and_compute(image, return_keypoints=False)
+    image_descriptors = ORB().detect_and_compute(image, return_keypoints=False)
     
     descriptors_from_db = dl.load_descriptors_from_db()
     
-    orbh = ORBHelper()
+    orbh = ORB()
     best_matches = get_best_matches(image_descriptors, descriptors_from_db, n_nearest=n_nearest)
 
 

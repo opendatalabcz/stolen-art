@@ -1,12 +1,12 @@
 from core.models import Painting, PaintingDescriptors
-from painting.orb_helper import ORBHelper
+from painting.orb import ORB
 from painting.data_loader import DataLoader as dl
 from django.core.files import File
 import cv2
 
 def save_images_to_db(paintings_paths):
 
-    orbh = ORBHelper(500)
+    orbh = ORB(500)
 
     counter = 0
 
