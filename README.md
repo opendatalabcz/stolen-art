@@ -12,12 +12,12 @@ The repo has three main parts:
    - easily installed using Docker
    - two separate containers for django and database
    - implements RESTful API
-   - the painting recognition occurs on the server
+   - performs the painting recognition
    - full source code in *server* directory
 3. **Jupyter notebooks**
-   - notebooks were used for downloading/augmenting paintings and for demonstration purposes
+   - jupyter notebooks were used for downloading/augmenting paintings and to demonstrate the ORB algorithm
    - data augmentation notebook, data downloader notebook, orb demonstration notebook
-   - all notebooks in *jupyter_notebooks* directory 
+   - all notebooks are in *jupyter_notebooks* directory 
 
 
 **Each directory contains separate README.md** with details of usage.
