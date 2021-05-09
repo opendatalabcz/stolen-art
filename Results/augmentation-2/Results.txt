@@ -6,36 +6,119 @@ RESULTS:
 1] Tate oil on canvas
 
 Paintings found correctly: 174 -- 73.6 %
-Paintings founc incorrectly: 71 -- 24.4 %
+Paintings found incorrectly: 71 -- 24.4 %
 Paintings not found: 5 -- 2.0 %
+
+Paintings found correctly: 214 -- 85.6 %
+Paintings found incorrectly: 19 -- 7.6 %
+Paintings not found: 17 -- 6.800000000000001 %
+
+Paintings found correctly: 204 -- 81.6 %
+Paintings found incorrectly: 26 -- 10.4 %
+Paintings not found: 20 -- 8.0 %
+
+Paintings found correctly: 200 -- 80.0 %
+Paintings found incorrectly: 38 -- 15.2 %
+Paintings not found: 12 -- 4.800000000000001 %
+
+Paintings found correctly: 198 -- 79.2 %
+Paintings found incorrectly: 43 -- 17.2 %
+Paintings not found: 9 -- 3.6 %
 
 
 2] Tate screenprint on paper
 
 Paintings found correctly: 101 -- 40.4 %
-Paintings founc incorrectly: 142 -- 56.8 %
+Paintings found incorrectly: 142 -- 56.8 %
 Paintings not found: 7 -- 2.8000000000000003 %
+
+Paintings found correctly: 117 -- 46.800000000000004 %
+Paintings found incorrectly: 111 -- 44.4 %
+Paintings not found: 22 -- 8.799999999999999 %
+
+Paintings found correctly: 120 -- 48.0 %
+Paintings found incorrectly: 107 -- 42.8 %
+Paintings not found: 23 -- 9.2 %
+
+Paintings found correctly: 109 -- 43.6 %
+Paintings found incorrectly: 121 -- 48.4 %
+Paintings not found: 20 -- 8.0 %
+
+Paintings found correctly: 124 -- 49.6 %
+Paintings found incorrectly: 109 -- 43.6 %
+Paintings not found: 17 -- 6.799999999999999 %
 
 
 3] Tate lithograph on paper
 
+Paintings found correctly: 142 -- 56.8 %
+Paintings found incorrectly: 99 -- 39.6 %
+Paintings not found: 9 -- 3.6 %
+
 Paintings found correctly: 120 -- 48.0 %
-Paintings founc incorrectly: 126 -- 50.4 %
+Paintings found incorrectly: 126 -- 50.4 %
 Paintings not found: 4 -- 1.6 %
+
+Paintings found correctly: 145 -- 58.0 %
+Paintings found incorrectly: 99 -- 39.6 %
+Paintings not found: 6 -- 2.4 %
+
+Paintings found correctly: 124 -- 49.6 %
+Paintings found incorrectly: 113 -- 45.2 %
+Paintings not found: 13 -- 5.2 %
+
+Paintings found correctly: 136 -- 54.4 %
+Paintings found incorrectly: 107 -- 42.8 %
+Paintings not found: 7 -- 2.8 %
 
 
 4] Tate watercolour on paper
 
-Paintings found correctly: 140 -- 56.00000000000001 %
-Paintings founc incorrectly: 99 -- 39.6 %
-Paintings not found: 11 -- 4.3999999999999995 %
+Paintings found correctly: 161 -- 64.4 %
+Paintings found incorrectly: 17 -- 6.800000000000001 %
+Paintings not found: 72 -- 28.799999999999997 %
 
+Paintings found correctly: 152 -- 60.8 %
+Paintings found incorrectly: 29 -- 11.6 %
+Paintings not found: 69 -- 27.6 %
+
+Paintings found correctly: 168 -- 67.2 %
+Paintings found incorrectly: 21 -- 8.4 %
+Paintings not found: 61 -- 24.4 %
+
+Paintings found correctly: 159 -- 63.6 %
+Paintings found incorrectly: 19 -- 7.6 %
+Paintings not found: 72 -- 28.799999999999997 %
+
+Paintings found correctly: 163 -- 65.2 %
+Paintings found incorrectly: 31 -- 12.4 %
+Paintings not found: 56 -- 22.4 %
 
 5] All above merged
 
 Paintings found correctly: 119 -- 47.6 %
-Paintings founc incorrectly: 115 -- 46.0 %
+Paintings found incorrectly: 115 -- 46.0 %
 Paintings not found: 16 -- 6.4 %
+
+Paintings found correctly: 130 -- 52.0 %
+Paintings found incorrectly: 82 -- 32.800000000000004 %
+Paintings not found: 38 -- 15.2 %
+
+Paintings found correctly: 172 -- 68.8 %
+Paintings found incorrectly: 42 -- 16.8 %
+Paintings not found: 36 -- 14.399999999999999 %
+
+Paintings found correctly: 149 -- 59.6 %
+Paintings found incorrectly: 61 -- 24.4 %
+Paintings not found: 40 -- 16 %
+
+Paintings found correctly: 141 -- 56.4 %
+Paintings found incorrectly: 68 -- 27.2 %
+Paintings not found: 41 -- 16.399999999999999 %
+
+
+
+
 
 
 

@@ -6,40 +6,118 @@ RESULTS:
 1] Tate oil on canvas:
 
 Paintings found correctly: 247 -- 98.8 %
-Paintings founc incorrectly: 2 -- 0.8 %
+Paintings found incorrectly: 2 -- 0.8 %
+Paintings not found: 1 -- 0.4 %
+
+Paintings found correctly: 245 -- 98.0 %
+Paintings found incorrectly: 4 -- 1.6 %
+Paintings not found: 1 -- 0.4 %
+
+Paintings found correctly: 248 -- 99.2 %
+Paintings found incorrectly: 1 -- 0.4 %
+Paintings not found: 1 -- 0.4 %
+
+Paintings found correctly: 245 -- 98.0 %
+Paintings found incorrectly: 3 -- 1.2 %
+Paintings not found: 2 -- 0.8 %
+
+Paintings found correctly: 247 -- 98.8 %
+Paintings found incorrectly: 2 -- 0.8 %
 Paintings not found: 1 -- 0.4 %
 
 
 2] Tate Screenprint on paper:
 
-Paintings found correctly: 201 -- 84.4 %
-Paintings founc incorrectly: 39 -- 11.6 %
+Paintings found correctly: 201 -- 80.4 %
+Paintings found incorrectly: 39 -- 15.6 %
 Paintings not found: 10 -- 4.0 %
+
+Paintings found correctly: 210 -- 84.0 %
+Paintings found incorrectly: 30 -- 12.0 %
+Paintings not found: 10 -- 4.0 %
+
+Paintings found correctly: 199 -- 79.6 %
+Paintings found incorrectly: 42 -- 16.8 %
+Paintings not found: 9 -- 3.6 %
+
+Paintings found correctly: 202 -- 80.8 %
+Paintings found incorrectly: 37 -- 14.8 %
+Paintings not found: 11 -- 4.4 %
+
+Paintings found correctly: 196 -- 78.4 %
+Paintings found incorrectly: 41 -- 16.4 %
+Paintings not found: 13 -- 5.2 %
 
 
 3] Tate Lithograph on Paper
 
 Paintings found correctly: 221 -- 88.4 %
-Paintings founc incorrectly: 24 -- 9.6 %
+Paintings found incorrectly: 24 -- 9.6 %
 Paintings not found: 5 -- 2.0 %
+
+Paintings found correctly: 224 -- 89.6 %
+Paintings found incorrectly: 22 -- 8.8 %
+Paintings not found: 4 -- 1.6 %
+
+Paintings found correctly: 218 -- 87.2 %
+Paintings found incorrectly: 26 -- 10.4 %
+Paintings not found: 6 -- 2.4 %
+
+Paintings found correctly: 231 -- 92.4 %
+Paintings found incorrectly: 18 -- 7.2 %
+Paintings not found: 1 -- 0.4 %
+
+Paintings found correctly: 216 -- 86.4 %
+Paintings found incorrectly: 30 -- 12.0 %
+Paintings not found: 4 -- 1.6 %
 
 
 4] Tate watercolour on paper:
 
 Best match for image_20933 is image_20933
 Paintings found correctly: 245 -- 98.0 %
-Paintings founc incorrectly: 3 -- 1.2 %
+Paintings found incorrectly: 3 -- 1.2 %
 Paintings not found: 2 -- 0.8 %
 
+Paintings found correctly: 243 -- 97.2 %
+Paintings found incorrectly: 5 -- 2.0 %
+Paintings not found: 2 -- 0.8 %
 
-5] All below merged:
+Paintings found correctly: 241 -- 96.4 %
+Paintings found incorrectly: 4 -- 1.6 %
+Paintings not found: 5 -- 2.0 %
+
+Paintings found correctly: 246 -- 98.4 %
+Paintings found incorrectly: 2 -- 0.8 %
+Paintings not found: 2 -- 0.8 %
+
+Paintings found correctly: 242 -- 96.8 %
+Paintings found incorrectly: 4 -- 1.6 %
+Paintings not found: 4 -- 1.6 %
+
+
+
+5] Mix:
 
 Paintings found correctly: 213 -- 85.2 %
-Paintings founc incorrectly: 35 -- 14.000000000000002 %
+Paintings found incorrectly: 35 -- 14.000000000000002 %
 Paintings not found: 2 -- 0.8 %
 
+Paintings found correctly: 220 -- 88.0 %
+Paintings found incorrectly: 29 -- 11.6 %
+Paintings not found: 1 -- 0.4 %
 
+Paintings found correctly: 209 -- 83.6 %
+Paintings found incorrectly: 38 -- 15.2 %
+Paintings not found: 3 -- 1.2 %
 
+Paintings found correctly: 207 -- 82.8 %
+Paintings found incorrectly: 41 -- 16.4 %
+Paintings not found: 2 -- 0.8 %
+
+Paintings found correctly: 212 -- 84.8 %
+Paintings found incorrectly: 34 -- 13.6 %
+Paintings not found: 4 -- 1.6 %
 
 
 
