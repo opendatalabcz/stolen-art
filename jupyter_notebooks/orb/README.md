@@ -1,17 +1,14 @@
-# ORB testing
+# Testing the ORB algorithm
 
-This notebook simulates searching for a painting in a database.
+This directory contains jupyter notebooks where I tested the ORB algorithm before I decided to use it and implement it on the server. 
 
-## Test data
+See the ORB_Tate notebook, others are experimental. The notebook contains methods for visualisation optimalization so the notebook does not crash when displaying large images. 
 
-For this notebook I took pictures of several paintings from different angles and various light conditions. 
+## Usage
 
-Paintings in "mydata-found" are considered found paintings (paintings we want to search in the database). 
-Paintings in "mydata-stolen" are considered stolen paintings (paintings in the database).
+1. Set the stolen_art_dir_path and found_paintings_dir_path variables to contain the paths to painting directories.
+    - The first directory should contain stolen paintings (user taken) and the second one contains found painting (the paintings in the database).
+2. If you want to visualize matches, set draw_match to True.
 
 
-# Steps
-
-For each found painting, search the database for a best match and display the result.
-
-- more TODO
+The notebook contains an example of usage, it uses directories containing approx. 10 paintings just for demonstration purposes.
