@@ -29,18 +29,18 @@ def save_images_to_db(paintings_paths):
 
         
         if im_descriptors is None:
-            # TODO image has no descriptors
+            # no descriptors, unrecognizable image
             continue
 
+
         im_descriptors = im_descriptors.tolist()
-        #print(type(im_descriptors))
 
         d = PaintingDescriptors(painting=p,descriptors=im_descriptors)
         d.save()
 
         counter = counter + 1
-        if counter == 1800:
-            break
+        #if counter == 1800:
+        #    break
         
 
 

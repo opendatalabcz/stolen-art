@@ -37,7 +37,6 @@ class DataLoader:
     def load_descriptors_from_db():
 
         descs_db = PaintingDescriptors.objects.all().values()
-        #print(descs_db[2])
         descs = {}
         for desc_inst in descs_db:
             painting_id = desc_inst['painting_id']

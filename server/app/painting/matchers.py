@@ -66,7 +66,7 @@ class Flann:
         matches = self.matcher.knnMatch(desc1, desc2, k)
         ok_matches_num = 0
 
-        # ratio test as per Lowe's paper
+        # ratio test 
         for i, candidates in enumerate(matches):
             
             if (len(candidates)<2):
@@ -96,7 +96,7 @@ class Brute:
 
             matches = self.matcher.knnMatch(desc1, desc2, 2) 
 
-            # ratio test as per Lowe's paper
+            # ratio test 
             for i, candidates in enumerate(matches):
                 
                 if (len(candidates)<2):

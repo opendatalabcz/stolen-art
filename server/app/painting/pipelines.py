@@ -49,19 +49,6 @@ def test_accuracy_from_dir(directory):
         else:
             not_found += 1
 
-        
-        counter+=1
-        if counter % 25:
-            all = (correct_found + incorrect_found + not_found)
-            accuracy = correct_found / all
-            print(f"Still testing... Tested: {counter}")
-            print(f"Paintings found correctly: {correct_found} -- {accuracy*100} %")
-            print(f"Paintings founc incorrectly: {incorrect_found} -- {(incorrect_found / all) * 100} %")
-            print(f"Paintings not found: {not_found} -- {(not_found / all) * 100} %")
-
-
-        if counter == 250:
-            break
 
     all = (correct_found + incorrect_found + not_found)
 
@@ -69,7 +56,7 @@ def test_accuracy_from_dir(directory):
 
 
     print(f"Paintings found correctly: {correct_found} -- {accuracy*100} %")
-    print(f"Paintings founc incorrectly: {incorrect_found} -- {(incorrect_found / all) * 100} %")
+    print(f"Paintings found incorrectly: {incorrect_found} -- {(incorrect_found / all) * 100} %")
     print(f"Paintings not found: {not_found} -- {(not_found / all) * 100} %")
         
 
