@@ -1,4 +1,3 @@
-# specify the augmentors to be used
 augmenters_list = [
     
     # Gaussian blur images with a sigma from range
