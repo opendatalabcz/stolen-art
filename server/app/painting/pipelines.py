@@ -68,7 +68,7 @@ def find_similar(uploaded_image, n_nearest=1):
     image_descriptors = ORB().detect_and_compute(image, return_keypoints=False)
     
     descriptors_from_db = dl.load_descriptors_from_db()
-    
+    print(len(descriptors_from_db))
     orbh = ORB()
     best_matches = get_best_matches(image_descriptors, descriptors_from_db, n_nearest=n_nearest)
 

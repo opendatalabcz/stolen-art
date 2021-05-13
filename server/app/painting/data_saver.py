@@ -4,6 +4,22 @@ from painting.data_loader import DataLoader as dl
 from django.core.files import File
 import cv2
 
+def save_image_to_db(image, p):
+
+    orbh = ORB(500)
+    image = dl.file_to_image(image)
+    im_descriptors = orbh.detect_and_compute(image, return_keypoints=False)
+    
+    if im_descriptors is None:
+            # no descriptors, unrecognizable image
+            return
+
+
+    im_descriptors = im_descriptors.tolist()
+
+    d = PaintingDescriptors(painting=p,descriptors=im_descriptors)
+    d.save()
+
 def save_images_to_db(paintings_paths):
 
     orbh = ORB(500)

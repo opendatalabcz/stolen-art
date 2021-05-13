@@ -5,7 +5,7 @@ from core.models import Painting, PaintingDescriptors
 from painting import serializers
 
 from django.core import serializers as core_serializers
-
+from painting.data_saver import save_image_to_db
 
 from painting.pipelines import find_similar
 from app import settings
@@ -20,13 +20,16 @@ class PaintingViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
 
+        self.queryset = self.queryset.all()
         return self.queryset
 
     def perform_create(self, serializer):
         """Create a new painting"""
 
-        serializer.save()
+        p = serializer.save()
 
+        image = serializer.validated_data.get("image")        
+        save_image_to_db(image, p)
 
 from rest_framework.response import Response
 import time
@@ -77,4 +80,5 @@ class DescriptorsViewSet(viewsets.GenericViewSet,
 
     def get_queryset(self):
 
+        self.queryset = self.queryset.all()
         return self.queryset
